@@ -1,0 +1,54 @@
+<loading  ng-show="restaurantes.loading"></loading>
+<div ng-hide="restaurantes.loading">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="col-sm-7">
+                    <h4>Choisisez votre restaurant</h4>
+                </div>
+                <div class="col-sm-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <input type="text" ng-model="restaurantes.search" class="form-control" placeholder="Rechercher..." aria-describedby="sizing-addon3">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="col-xs-4"><strong>Nom</strong></div>
+                    <div class="col-xs-8"><strong>Adresse</strong></div>
+                    <div class="clearfix"></div>
+                </div>
+                <a class="list-group-item" ng-repeat="resto in restaurantes.restaurantes | filter:restaurantes.search" ng-click="restaurantes.setSelectedRestaurante(resto);" ng-class="{'active':restaurantes.selectedRestaurante&&restaurantes.selectedRestaurante.id==resto.id}">
+                    <div class="col-xs-4"><strong>{{resto.name}}</strong></div>
+                    <div class="col-xs-8">{{resto.adresse}}</div>
+                    <div class="clearfix"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-show="restaurantes.selectedRestaurante">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>{{restaurantes.selectedRestaurante.name}}</h4>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">Adresse</h4>
+                    <p class="list-group-item-text">{{restaurantes.selectedRestaurante.adresse}}</p>
+                </div>
+                <div class="list-group-item">
+                    <p class="list-group-item-text">{{restaurantes.selectedRestaurante.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <ul class="pager">
+        <!--<li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next"><a ui-sref="commandeeditor({ restaurantID: restaurantes.selectedRestaurante.id })">choisir(0)</a></li>
+        <li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next"><a ng-href="{{$state.href('commandeeditor', restaurantes.linkSelectedRestaurante)}}">choisir(1)/a></li>
+        <li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next"><a ng-href="{{$state.href('restaurantliste')}}">liste(2)</a></li>-->
+        <li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next"><a ng-href="{{restaurantes.getLinkSelectedRestaurante()}}">choisir</a></li>
+    </ul>
+</div>

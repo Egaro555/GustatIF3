@@ -1,0 +1,26 @@
+<loading  ng-show="validationCMD.loading"></loading>
+<div ng-hide="validationCMD.loading">
+    <h1 class="text-center">Choix des produit</h1>
+    <h2>Veuillez valider votre panier</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Restaurant</th>
+                <th>Adresse de livraison</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>{{validationCMD.restaurant.name}}</strong> : {{validationCMD.restaurant.adresse}}</td>
+                <td>???</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Votre panier :</h3>
+    <commande-detail></commande-detail>
+    <ul class="pager">
+        <li class="previous"><a ng-href="{{validationCMD.getLinkEditor()}}">Retour</a></li>
+        <li class="next"><a ng-href="" ng-click="validationCMD.valider()">Valider</a></li>
+        <li class="next"><a ng-href="" ng-click="validationCMD.annuler()">Annuler</a></li>
+    </ul>
+</div>

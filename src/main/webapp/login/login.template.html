@@ -1,0 +1,56 @@
+<loading  ng-show="login.loading"></loading>
+<div ng-hide="login.loading">
+    <div class="panel panel-default">
+        <div class="panel-heading">Connexion</div>
+        <div class="panel-body">
+            <form ng-submit="login.connexion()">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" ng-model="login.email" placeholder="email">
+                </div><br>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Mot de passe</span>
+                    <input type="text" class="form-control" ng-model="login.mdp" placeholder="password">
+                </div><br>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Pas de compte ? Inscrivez-vous gratuitement !</div>
+        <div class="panel-body">
+            <form ng-submit="login.login()">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Prénom</span>
+                    <input type="text" class="form-control" ng-model="login.nom" placeholder="password">
+                </div><br>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Nom</span>
+                    <input type="text" class="form-control" ng-model="login.nom" placeholder="password">
+                </div><br>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Adresse mail</span>
+                    <input type="text" class="form-control" ng-model="login.email" placeholder="email">
+                </div><br>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Adresse de livraison</span>
+                    <input type="text" class="form-control" ng-model="login.livraison">
+                </div><br>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Code postal:</span>
+                        <input type="text" class="form-control" ng-model="login.codepostal" placeholder="Ex : 69100">
+                    </div><br>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Ville:</span>
+                        <input type="text" class="form-control" ng-model="login.ville">
+                    </div><br>
+                </div>
+                <div class="clearfix"></div>
+                <button type="submit" class="btn btn-primary">S'enregister</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<loading  ng-show="detailCMD.loading"></loading>
+<div ng-hide="detailCMD.loading">
+    <table class="table">
+        <thead class="thead-inverse">
+            <th>Nom</th>
+            <th style="width:50px">Quantité</th>
+            <th style="width:50px">Prix</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="produit in detailCMD.produits">
+                <td>{{produit.name}}</td>
+                <td>
+                    <div class="input-group input-group-sm" ng-show="detailCMD.editable">
+                        <input type="number" class="form-control" ng-model="produit.quantite" min="1">
+                    </div>
+                    <div ng-hide="detailCMD.editable">
+                        {{produit.quantite}}
+                    </div>
+                </td>
+                <td>{{produit.quantite * produit.prix | number:2}}&nbsp;E</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right"><strong>Total</strong></td>
+                <td><strong>{{detailCMD.getTotal()}}&nbsp;E</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

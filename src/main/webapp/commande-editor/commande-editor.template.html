@@ -1,0 +1,69 @@
+<loading  ng-show="editorCMD.loading"></loading>
+<div ng-hide="editorCMD.loading">
+    <h1 class="text-center">Choix des produit</h1>
+    <h2>Veuillez ajouter des produits à votre panier</h2>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="col-sm-7">
+                    <h4>Choisisez vos plats</h4>
+                </div>
+                <div class="col-sm-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <input type="text" ng-model="editorCMD.search" class="form-control" placeholder="Rechercher..." aria-describedby="sizing-addon3">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="col-xs-8"><strong>Nom</strong></div>
+                    <div class="col-xs-4"><strong>Prix</strong></div>
+                    <div class="clearfix"></div>
+                </div>
+                <a class="list-group-item" ng-repeat="produit in editorCMD.produits | filter:editorCMD.search" ng-click="editorCMD.setSelectedProduit(produit)" ng-class="{'active':editorCMD.selectedProduit==produit}">
+                    <div class="col-xs-8"><strong>{{produit.name}}</strong></div>
+                    <div class="col-xs-4">{{produit.prix | number:2}}</div>
+                    <div class="clearfix"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-show="editorCMD.selectedProduit">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>{{editorCMD.selectedProduit.name}}</h4>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <p class="list-group-item-text">{{editorCMD.selectedProduit.description}}</p>
+                </div>
+                <div class="list-group-item">
+                    <div class="col-sm-offset-8 col-xs-6 col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="basic-addon1">Quantité</span>
+                            <input type="number" class="form-control" ng-model="editorCMD.quantite" min="1">
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-8 col-xs-6 col-sm-4">
+                        <div class="pull-left">Prix : </div>
+                        <div class="pull-right"><strong>{{editorCMD.selectedProduit.prix * editorCMD.quantite | number:2 }} E</strong></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="text-right">
+                        <a href="" ng-class="{'disabled':!(editorCMD.selectedProduit.prix * editorCMD.quantite)}" ng-click="editorCMD.add()" class="btn btn-success">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <h2>Votre panier actuel :</h2>
+    <commande-detail ed="editable"></commande-detail>
+    <ul class="pager">
+        <li class="previous"><a ui-sref="restaurant">Retour</a></li>
+        <li class="next"><a ng-href="{{editorCMD.getLinkValidation()}}">Suivent</a></li>
+    </ul>
+</div>

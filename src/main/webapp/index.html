@@ -4,14 +4,87 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html ng-app="appGustatIF">
     <head>
         <title>Gustat'IF - Liste des Restaurants</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        
+        <script src="/jquery-1.12.1.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        
+	<script src="/angular-1.6.4/angular.min.js"></script>
+	<script src="/angular-1.6.4/angular-cookies.min.js"></script>
+	<script src="/angular-1.6.4/angular-ui-router.js"></script>
+        
+        <script src="app.module.js"></script>
+        
+        <script src="loading/loading.module.js"></script>
+        <script src="loading/loading.component.js"></script>
+        <script src="login/login.module.js"></script>
+        <script src="login/login.component.js"></script>
+        <script src="restaurant-liste/restaurant-liste.module.js"></script>
+        <script src="restaurant-liste/restaurant-liste.component.js"></script>
+        <script src="commande-detail/commande-detail.module.js"></script>
+        <script src="commande-detail/commande-detail.component.js"></script>
+        <script src="commande-validation/commande-validation.module.js"></script>
+        <script src="commande-validation/commande-validation.component.js"></script>
+        <script src="commande-editor/commande-editor.module.js"></script>
+        <script src="commande-editor/commande-editor.component.js"></script>
+        
+        <script src="app.config.js"></script>
+        
     </head>
     <body>
-        <div>TODO write content</div>
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                      <img alt="Logo" src="...">
+                    </a>
+                </div>
+                <div class="header-center">
+                    <div class="header-statut">
+                        <a class="btn btn-default hidden-xs">test1</a>
+                        <strong class="hidden-xs">&nbsp;>&nbsp;</strong>
+                        <a class="btn btn-primary">test2</a>
+                        <strong class="hidden-xs">&nbsp;>&nbsp;</strong>
+                        <a class="btn btn-default hidden-xs">test3</a>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="btn-group navbar-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            UserName <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Deconection</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav" style="position : fixed; z-index: 9000; top:50px;">
+            <li><a ui-sref="restaurantListe">Restaurant</a></li>
+        </ul>
+        <div class="container body-container">
+            <div ui-view></div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="col-sm-4 text-left-not-xs text-center-xs">
+                    <a href=" ">Conditions d'utilisation</a>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <a href=" ">politique de confidentialité</a>
+                </div>
+                <div class="col-sm-4 text-right-not-xs text-center-xs">
+                    <a href=" ">Mentions légales</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </footer>
     </body>
 </html>
