@@ -13,5 +13,5 @@ angular.
                 alert("inscription[Not implemented]");
             }
         }
-    });
+    })
 //*/
