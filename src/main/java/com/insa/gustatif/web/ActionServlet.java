@@ -137,14 +137,14 @@ public class ActionServlet extends HttpServlet {
                     }
 
                 }
-            } else if (serviceName.equals("deconnexionClient")) {
+            } else if (serviceName.equals("deconnexion")) {
 
                 session.removeAttribute("livreur");
 
                 session.removeAttribute("client");
                 session.removeAttribute("commande");
-                
-               resultPrinter.printBooleanResultAsJSON(true);
+
+                resultPrinter.printBooleanResultAsJSON(true);
 
             } else if (serviceName.equals("creerClient")) {
 
@@ -178,31 +178,94 @@ public class ActionServlet extends HttpServlet {
 
                 }
 
-            } else if (serviceName.equals("searchRestaurants")) {
+            } else if (serviceName.equals("getUtilisateur")) {
+
+                try {
+
+                    if (session.getAttribute("client") != null) {
+
+                        resultPrinter.printClientAsJSON((Client) session.getAttribute("client"));
+
+                    } else if (session.getAttribute("livreur") != null) {
+
+                        resultPrinter.printLivreurAsJSON((Livreur) session.getAttribute("livreur"));
+
+                    } else {
+
+                        resultPrinter.printBooleanResultAsJSON(false);
+
+                    }
+
+                } catch (Exception e) {
+
+                    resultPrinter.printErrorAsJSON(e);
+
+                }
+
+            } else if (serviceName.equals("getUtilisateur")) {
+
+                try {
+
+                    if (session.getAttribute("client") != null) {
+
+                        resultPrinter.printClientAsJSON((Client) session.getAttribute("client"));
+
+                    } else if (session.getAttribute("livreur") != null) {
+
+                        resultPrinter.printLivreurAsJSON((Livreur) session.getAttribute("livreur"));
+
+                    } else {
+
+                        resultPrinter.printBooleanResultAsJSON(false);
+
+                    }
+
+                } catch (Exception e) {
+
+                    resultPrinter.printErrorAsJSON(e);
+
+                }
+
+            } else if (serviceName.equals("getCommande")) {
 
                 Auth requireAuth = Auth.CLIENT;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
-                requiredArgs.put("research", "String : substring of a restaurant name");
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    Commande commande = (Commande) session.getAttribute("commande");
+
+                    if (commande != null) {
+                        resultPrinter.printCommandeAsJSON(commande);
+                    } else {
+                        resultPrinter.printBooleanResultAsJSON(false);
+                    }
+
+                }
+
+            } else if (serviceName.equals("clearCommande")) {
+
+                Auth requireAuth = Auth.CLIENT;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
 
                 if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
                 } else {
 
-                    try {
-                        searchRestaurantsAction action = new searchRestaurantsAction();
-                        action.execute(request);
+                    Client client = (Client) session.getAttribute("client");
 
-                        List<Restaurant> foundRestaurants = action.getFoundRestaurants();
+                    if (client != null) {
+                        session.setAttribute("commande", new Commande(client, new ArrayList(), null, null));
 
-                        resultPrinter.printRestaurantListAsJSON(foundRestaurants);
-
-                    } catch (Exception e) {
-
-                        resultPrinter.printErrorAsJSON(e);
-
+                        resultPrinter.printBooleanResultAsJSON(true);
+                    } else {
+                        resultPrinter.printBooleanResultAsJSON(false);
                     }
+
                 }
 
             } else if (serviceName.equals("searchProduits")) {
