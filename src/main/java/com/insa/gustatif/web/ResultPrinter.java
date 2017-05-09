@@ -329,7 +329,7 @@ class ResultPrinter {
         } else if (livreur instanceof LivreurVelo) {
             jsonLivreur.addProperty("type", "Velo");
             jsonLivreur.addProperty("nom", ((LivreurVelo) livreur).getNom());
-            jsonLivreur.addProperty("prnom", ((LivreurVelo) livreur).getPrenom());
+            jsonLivreur.addProperty("prenom", ((LivreurVelo) livreur).getPrenom());
             jsonLivreur.addProperty("mail", ((LivreurVelo) livreur).getMail());
         }
 
