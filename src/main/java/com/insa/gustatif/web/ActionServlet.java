@@ -48,11 +48,18 @@ public class ActionServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         Auth auth = Auth.NONE;
+        Object user = session.getAttribute("user");
 
-        if ((Client) session.getAttribute("client") != null) {
-            auth = Auth.CLIENT;
-        } else if ((Livreur) session.getAttribute("livreur") != null) {
-            auth = Auth.LIVREUR;
+        if (user != null) {
+
+            if (user instanceof Client) {
+                auth = Auth.CLIENT;
+            } else if (user instanceof Livreur) {
+                auth = Auth.LIVREUR;
+            } else if (user instanceof Gestionnaire) {
+                auth = Auth.GESTIONNAIRE;
+            }
+
         }
 
         if (uri.length == 3 && uri[1].equals("service")) {
@@ -81,8 +88,7 @@ public class ActionServlet extends HttpServlet {
 
                         if (client != null) {
 
-                            session.removeAttribute("livreur");
-                            session.setAttribute("client", client);
+                            session.setAttribute("user", client);
 
                             session.setAttribute("commande", new Commande(client, new ArrayList(), null, null));
 
@@ -119,8 +125,10 @@ public class ActionServlet extends HttpServlet {
                         Livreur livreur = action.getLivreur();
 
                         if (livreur != null) {
-                            session.removeAttribute("client");
-                            session.setAttribute("livreur", livreur);
+
+                            session.setAttribute("user", livreur);
+
+                            session.removeAttribute("commande");
 
                             resultPrinter.printLivreurAsJSON(livreur);
 
@@ -137,11 +145,34 @@ public class ActionServlet extends HttpServlet {
                     }
 
                 }
+            } else if (serviceName.equals("connexionGestionnaire")) {
+
+                Auth requireAuth = Auth.NONE;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    try {
+
+                        session.setAttribute("user", new Gestionnaire());
+
+                        session.removeAttribute("commande");
+
+                        resultPrinter.printGestionnaireAsJSON();
+
+                    } catch (Exception e) {
+
+                        resultPrinter.printErrorAsJSON(e);
+
+                    }
+
+                }
             } else if (serviceName.equals("deconnexion")) {
 
-                session.removeAttribute("livreur");
-
-                session.removeAttribute("client");
+                session.removeAttribute("user");
                 session.removeAttribute("commande");
 
                 resultPrinter.printBooleanResultAsJSON(true);
@@ -177,23 +208,26 @@ public class ActionServlet extends HttpServlet {
                     }
 
                 }
-
+                
             } else if (serviceName.equals("getUtilisateur")) {
 
                 try {
-
-                    if (session.getAttribute("client") != null) {
-
-                        resultPrinter.printClientAsJSON((Client) session.getAttribute("client"));
-
-                    } else if (session.getAttribute("livreur") != null) {
-
-                        resultPrinter.printLivreurAsJSON((Livreur) session.getAttribute("livreur"));
-
+                                 
+                    if(user instanceof Client) {
+                        
+                        resultPrinter.printClientAsJSON((Client) user);
+                        
+                    } else if(user instanceof Livreur) {
+                        
+                        resultPrinter.printLivreurAsJSON((Livreur) user);
+                        
+                    } else if(user instanceof Gestionnaire) {
+                        
+                        resultPrinter.printGestionnaireAsJSON();
+                        
                     } else {
-
+                        
                         resultPrinter.printBooleanResultAsJSON(false);
-
                     }
 
                 } catch (Exception e) {
@@ -201,31 +235,6 @@ public class ActionServlet extends HttpServlet {
                     resultPrinter.printErrorAsJSON(e);
 
                 }
-
-            } else if (serviceName.equals("getUtilisateur")) {
-
-                try {
-
-                    if (session.getAttribute("client") != null) {
-
-                        resultPrinter.printClientAsJSON((Client) session.getAttribute("client"));
-
-                    } else if (session.getAttribute("livreur") != null) {
-
-                        resultPrinter.printLivreurAsJSON((Livreur) session.getAttribute("livreur"));
-
-                    } else {
-
-                        resultPrinter.printBooleanResultAsJSON(false);
-
-                    }
-
-                } catch (Exception e) {
-
-                    resultPrinter.printErrorAsJSON(e);
-
-                }
-
             } else if (serviceName.equals("getCommande")) {
 
                 Auth requireAuth = Auth.CLIENT;
@@ -256,10 +265,8 @@ public class ActionServlet extends HttpServlet {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
                 } else {
 
-                    Client client = (Client) session.getAttribute("client");
-
-                    if (client != null) {
-                        session.setAttribute("commande", new Commande(client, new ArrayList(), null, null));
+                    if (user != null && user instanceof Client) {
+                        session.setAttribute("commande", new Commande((Client) user, new ArrayList(), null, null));
 
                         resultPrinter.printBooleanResultAsJSON(true);
                     } else {
@@ -373,7 +380,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("cloturerCommandeLivreur")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -398,7 +405,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("findAllLivreurs")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -427,7 +434,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("findAllVelos")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -452,7 +459,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("findAllDrones")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -479,7 +486,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("findAllClients")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -504,7 +511,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("findAllRestaurants")) {
 
-                Auth requireAuth = Auth.CLIENT;
+                Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -783,17 +790,32 @@ public class ActionServlet extends HttpServlet {
 
     private boolean serviceMissingRequirement(HttpServletRequest request, HttpSession session, Auth auth, HashMap<String, String> requiredArgs) {
 
-        if (auth == Auth.CLIENT && session.getAttribute("client") == null) {
+        Object user = session.getAttribute("user");
+        
+        if (auth == Auth.CLIENT && !(user instanceof Client)) {
             return true;
         }
 
-        if (auth == Auth.LIVREUR && session.getAttribute("livreur") == null) {
+        if (auth == Auth.LIVREUR && !(user instanceof Livreur)) {
             return true;
         }
+        
+        if (auth == Auth.GESTIONNAIRE && !(user instanceof Gestionnaire)) {
+            return true;
+        }        
 
-        if (auth == Auth.CLIENT_OR_LIVREUR && !(session.getAttribute("client") != null || session.getAttribute("livreur") != null)) {
+        if (auth == Auth.CLIENT_OR_LIVREUR && !(user instanceof Client || user instanceof Livreur)) {
             return true;
-        }
+        }        
+
+        if (auth == Auth.LIVREUR_OR_GESTIONNAIRE && !(user instanceof Gestionnaire || user instanceof Livreur)) {
+            return true;
+        }   
+        
+        if (auth == Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE && !(user instanceof Client || user instanceof Gestionnaire || user instanceof Livreur)) {
+            return true;
+        }        
+        
 
         for (String arg : requiredArgs.keySet()) {
 

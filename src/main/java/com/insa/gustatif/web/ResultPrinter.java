@@ -238,6 +238,20 @@ class ResultPrinter {
         out.println(json);
     }
 
+    void printGestionnaireAsJSON() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        JsonObject gestionnaire = new JsonObject();
+
+        gestionnaire.addProperty("nom", "Gestionnaire");
+        gestionnaire.addProperty("prenom", "");
+
+        JsonObject container = new JsonObject();
+        container.add("gestionnaire", gestionnaire);
+        String json = gson.toJson(container);
+        out.println(json);
+    }
+
     private JsonObject encodeCommandeToJSON(Commande c) {
 
         JsonObject jsonCommande = new JsonObject();
@@ -329,13 +343,12 @@ class ResultPrinter {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-       
 
         JsonObject container = new JsonObject();
         container.addProperty("error", "uncaughtException");
         container.addProperty("exceptionMessage", e.getMessage());
         container.addProperty("exceptionLocalizedMessage", e.getLocalizedMessage());
-        container.addProperty("exceptionStackTrace",  sw.toString());
+        container.addProperty("exceptionStackTrace", sw.toString());
         String json = gson.toJson(container);
         out.println(json);
     }
