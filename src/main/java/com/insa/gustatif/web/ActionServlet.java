@@ -266,7 +266,9 @@ public class ActionServlet extends HttpServlet {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
                 } else {
 
-                    Commande commande = ((Livreur) user).getCmdeEnCours();
+                    getCommandeLivreurAction action = new getCommandeLivreurAction((Livreur) user);
+                    action.execute(request);
+                    Commande commande = action.getResult();
 
                     if (commande != null) {
                         resultPrinter.printCommandeAsJSON(commande);
