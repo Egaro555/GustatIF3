@@ -26,27 +26,6 @@ class updateRestaurantAction implements Action {
 
         if (r != null) {
 
-            if (request.getParameter("adresse") != null) {
-                r.setAdresse(request.getParameter("adresse"));
-            }
-
-            if (request.getParameter("denomination") != null) {
-                r.setDenomination(request.getParameter("denomination"));
-            }
-
-            if (request.getParameter("description") != null) {
-                r.setDescription(request.getParameter("description"));
-            }
-
-            if (request.getParameter("latitude") != null) {
-                r.setLatitudeLongitude(Double.parseDouble(request.getParameter("latitude")), r.getLongitude());
-            }
-
-            if (request.getParameter("longitude") != null) {
-                r.setLatitudeLongitude(r.getLatitude(), Double.parseDouble(request.getParameter("longitude")));
-
-            }
-
             ServiceMetier.updateRestaurant(r);
             result = true;
         }

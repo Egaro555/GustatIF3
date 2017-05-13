@@ -15,13 +15,22 @@ import javax.servlet.http.HttpServletRequest;
  */
 class cloturerCommandeLivreurAction implements Action {
 
+    boolean result = false;
+
     @Override
     public void execute(HttpServletRequest request) {
 
         Livreur l = ServiceMetier.findLivreurById(Long.parseLong(request.getParameter("l")));
 
-        ServiceMetier.cloturerCommandeLivreur(l);
+        if (Long.parseLong(request.getParameter("c")) == l.getCmdeEnCours().getNumCommande()) {
+            ServiceMetier.cloturerCommandeLivreur(l);
+            result = true;
+        }
 
+    }
+
+    boolean getResult() {
+        return result;
     }
 
 }
