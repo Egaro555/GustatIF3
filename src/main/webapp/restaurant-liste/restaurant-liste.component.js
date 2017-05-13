@@ -4,53 +4,42 @@ angular.
     component('restaurantListe', {
         controllerAs : 'restaurantes',
         templateUrl: 'restaurant-liste/restaurant-liste.template.html',
-        controller: function RestaurantListController($timeout,$cookies,$state) {
-            this.loading = true;
-            this.restaurantes = [];
-            this.selectedRestaurante;
-            this.linkSelectedRestaurante;
+        controller: function RestaurantListController($scope,$http,$state,userService) {
+            var ctrl = this;
             
-            function setSelectedRestaurante(newRestaurante){
-                if(!newRestaurante)
-                    return;
-                this.selectedRestaurante = newRestaurante;
-                $cookies.putObject('restaurante',newRestaurante);
-                this.linkSelectedRestaurante = {restaurantId : newRestaurante.id};
+            this.loading = 1; // 
+            
+            this.restaurantesCharger = false;
+            this.restaurantes = [];
+            
+            this.selectedRestaurante;
+            
+            this.loadRestaurante = function(){
+                ctrl.loading++;
+                $http({
+                    method: 'GET',
+                    url: '/service/findAllRestaurants'
+                }).then(function successCallback(reponse){
+                    if(reponse.data.restaurants){
+                        ctrl.restaurantesCharger = true;
+                        ctrl.restaurantes = reponse.data.restaurants;
+                    }
+                    ctrl.loading--;
+                },function errorCallback(response) {
+                    ctrl.loading--;
+                });
             };
-            this.setSelectedRestaurante  = setSelectedRestaurante;
-            var local_ctrl = this;
-            this.test = function(){
-                $state.go('about');
-            };
+            
             this.getLinkSelectedRestaurante = function(){
-                if(this.selectedRestaurante){
-                        return $state.href('shop',{restaurantId:this.selectedRestaurante.id});    
-                }else{
-                    return $state.href('.');    
-                }
-                
+                    return (this.selectedRestaurante ?
+                            $state.href('shop',{restaurantId:this.selectedRestaurante.id}) :
+                            "");
             };
-            $timeout(function(){// test loading annimation
-                    local_ctrl.restaurantes = [
-                    {
-                        id:0,
-                        name: 'Resto del la Muerta',
-                        adresse: '5 Rue des cadavres',
-                        description: 'Un restorent ou la mort par cannibalisme arrive souvant'
-                    }, {
-                        id:1,
-                        name: 'Le Parisien',
-                        adresse: '18 Avenue des journalistes.',
-                        description: 'Restorent dont le parisent et forni en plus du repa!'
-                    }, {
-                        id:2,
-                        name: 'Le Prérvert',
-                        adresse: '5 Rue de la petite cocine',
-                        description: 'Resever au plus de 18 ans'
-                    }];
-                local_ctrl.setSelectedRestaurante($cookies.getObject('restaurante'));
-                local_ctrl.loading = false;
-            },1000);
+            
+            userService.requirLogin('client',$scope,function(){
+                ctrl.loadRestaurante();
+                ctrl.loading --;
+            });
         }
     });
 //*/

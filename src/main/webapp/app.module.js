@@ -4,4 +4,5 @@ angular.module('appGustatIF' , [
     'restaurantListe',
     'commandeEditor',
     'commandeDetail',
+    'login'
 ]);

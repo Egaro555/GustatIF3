@@ -1,5 +1,9 @@
 <loading  ng-show="detailCMD.loading"></loading>
 <div ng-hide="detailCMD.loading">
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="detailCMD.err">
+        <button type="button" class="close" ng-click="detailCMD.err = null;"><span aria-hidden="true">&times;</span></button>
+        <strong>ERREUR : !</strong> {{detailCMD.err}}
+    </div>
     <table class="table">
         <thead class="thead-inverse">
             <th>Nom</th>
@@ -7,17 +11,22 @@
             <th style="width:50px">Prix</th>
         </thead>
         <tbody>
-            <tr ng-repeat="produit in detailCMD.produits">
-                <td>{{produit.name}}</td>
+            <tr ng-repeat="produitItems in detailCMD.produits">
+                <td>{{produitItems.produit.denomination}}</td>
                 <td>
-                    <div class="input-group input-group-sm" ng-show="detailCMD.editable">
-                        <input type="number" class="form-control" ng-model="produit.quantite" min="1">
+                    <loading ng-show="produitItems.load"></loading>
+                    <div class="input-group input-group-sm" ng-show="produitItems.edit && !produitItems.load">
+                        <input style="min-width: 56px;" type="number" class="form-control" ng-model="produitItems.qte_tmp" min="1">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="button" ng-click="detailCMD.setQte(produitItems)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                            <button class="btn btn-danger" type="button" ng-click="produitItems.edit=false;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        </span>
                     </div>
-                    <div ng-hide="detailCMD.editable">
-                        {{produit.quantite}}
+                    <div ng-hide="produitItems.edit || produitItems.load" ng-click="produitItems.edit=true;produitItems.qte_tmp=produitItems.qte;">
+                        {{produitItems.qte}}
                     </div>
                 </td>
-                <td>{{produit.quantite * produit.prix | number:2}}&nbsp;E</td>
+                <td>{{(produitItems.edit?produitItems.qte_tmp:produitItems.qte) * produitItems.produit.prix | number:2}}&nbsp;E</td>
             </tr>
             <tr>
                 <td colspan="2" class="text-right"><strong>Total</strong></td>

@@ -1,0 +1,121 @@
+<div ng-if="dronesCMD.loading">
+    <loading></loading>
+</div>
+<div ng-if="!dronesCMD.loading">
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="dronesCMD.err">
+        <button type="button" class="close" ng-click="dronesCMD.err = null;"><span aria-hidden="true">&times;</span></button>
+        <strong>ERREUR : !</strong> {{dronesCMD.err}}
+    </div>
+    <h1 style="text-align: center;">Interface Gestionnaire</h1>
+    <h2>Liste des drônes</h2>
+    <hr />				
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
+               <div class="input-group-addon">
+                    <div style="transform: rotate(45deg);font-size: 18px;font-weight: bold;">
+                            &#9906;
+                    </div>
+               </div>
+               <input class="form-control" id="email" name="email" type="text"/>
+            </div>
+            <br />
+            <table class="table table-bordered">
+
+                    <tr style="background: lightgray;">
+                            <th>Code Drone</th>
+                            <th>Adresse</th>
+                            <th>Dispo</th>
+                            <th>Vitesse Moy</th>
+                            <th>Poids max</th>
+                    </tr>
+
+                    <tr ng-class="{active : drone == dronesCMD.selectedDrone}" ng-repeat="drone in dronesCMD.drones" ng-click="dronesCMD.selectedDrone = drone;dronesCMD.detail.show = false;">
+                            <td>{{drone.id}}</td>
+                            <td>{{drone.addresse}}</td>
+                            <td>{{(drone.cmdeEnCours===null?"oui":"non")}}</td>
+                            <td>{{drone.vitesseMoyenne}}km/h</td>
+                            <td>{{drone.chargeMaxi}}g</td>
+                    </tr>
+            </table>
+
+        </div>
+
+        <div class="col-md-6" ng-if="dronesCMD.selectedDrone && !dronesCMD.detail.show">
+
+            <div class="panel panel-default">
+                <div class="panel-body">							
+
+                    <h3>Drone n°{{dronesCMD.selectedDrone.id}}</h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Adresse : {{dronesCMD.selectedDrone.addresse}}</p>
+                            <p>Disponibilité : {{(dronesCMD.selectedDrone.cmdeEnCours===null?"OUI":"NON")}}</p>
+                            <p>Vitesse moyenne : {{dronesCMD.selectedDrone.vitesseMoyenne}} km/h</p>
+                            <p>Poids max : {{dronesCMD.selectedDrone.chargeMaxi}}g</p>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-sm" ng_if="dronesCMD.selectedDrone.cmdeEnCours!=null" ng-click="dronesCMD.detailCommande()">Détails Commande</button><br /><br />
+                            <button type="button" class="btn btn-default btn-sm" ng_if="dronesCMD.selectedDrone.cmdeEnCours!=null" ng-click="dronesCMD.cloturer()">Clôturer Commande</button>
+                        </div>
+                    </div>						
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="dronesCMD.detail.show">
+            <div class="panel panel-default" ng-if="dronesCMD.detail.show">
+                <div class="panel-heading">
+                    <h3>Drone n°{{dronesCMD.selectedDrone.id}}</h3>
+                </div>
+                <div class="panel-body" ng-if="dronesCMD.detail.loading">
+                    <loading></loading>
+                </div>
+                <div class="panel-body" ng-if="dronesCMD.detail.err">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" ng-click="dronesCMD.detail.err = null;"><span aria-hidden="true">&times;</span></button>
+                        <strong>ERREUR : !</strong> {{dronesCMD.detail.err}}
+                    </div>
+                </div>
+                <div class="panel-body" ng-if="dronesCMD.detail.charger">
+                    <h4>Commande n°{{dronesCMD.detail.commande.numCommande}}</h3>
+                    <strong>date de la Commande :</strong>{{dronesCMD.detail.commande.dateCommande}}<br/>
+                    <br>
+                    <h4>Client</h4>
+                    <strong>Nom :</strong>{{dronesCMD.detail.client.nom}}<br/>
+                    <strong>Adresse :</strong>{{dronesCMD.detail.client.addresse}}<br/>
+                    <strong>mail :</strong>{{dronesCMD.detail.client.mail}}<br/>
+                    <br>
+                    <h4>Restaurant</h4>
+                    <strong>Nom :</strong>{{dronesCMD.detail.restaurant.denomination}}<br/>
+                    <strong>Adresse :</strong>{{dronesCMD.detail.restaurant.adresse}}<br/>
+                    <br>
+                    <h4>Produis</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="produitItem in dronesCMD.detail.commande.produitCommande">
+                                <td>{{produitItem.produit.denomination}}</td>
+                                <td>{{produitItem.qte}}</td>
+                                <td>{{produitItem.qte*produitItem.produit.prix}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <strong>Poids total :</strong>{{dronesCMD.detail.commande.poidsTotal}} g<br/>
+                    <strong>Total :</strong>{{dronesCMD.detail.commande.prixTotal}} E<br/>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="dronesCMD.detail.show = false">Retour</button>
+                    <button type="button" class="btn btn-default btn-sm" ng-class="{disabled:dronesCMD.dronesCMD}" ng-click="dronesCMD.cloturer()">Clôturer Commande</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+						

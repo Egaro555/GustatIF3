@@ -122,7 +122,8 @@ body {
 
 /** LOADING ANIMATION **/
 .spinner {
-  margin: 20px auto;
+  margin-right: auto;
+  margin-left: auto;
   width: 70px;
   text-align: center;
 }

@@ -22,6 +22,14 @@ angular.module('appGustatIF')
                 url: '/login',
                 template : '<login></login>'
             })
+            .state('livreur', {
+                url: '/livreur',
+                template : '<livreur></livreur>'
+            })
+            .state('gestionnaire', {
+                url: '/gestionnaire',
+                template : '<drones></drones>'
+            })
             $urlRouterProvider.otherwise(function ($injector, $location) {
                 var $state = $injector.get('$state');
                 $state.go('login');

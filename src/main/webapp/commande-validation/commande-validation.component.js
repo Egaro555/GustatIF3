@@ -3,32 +3,82 @@ angular.
     component('commandeValidation', {
         controllerAs: 'validationCMD',
         templateUrl: 'commande-validation/commande-validation.template.html',
-        controller: function RestaurantListController($stateParams,$state) {
-            this.loading = false;
+        controller: function RestaurantListController($state,$http,$scope, $stateParams,$state,userService) {
+            var ctrl = this;
+            this.loading = 1;
+            this.loadingValidation = false;
             this.restaurantId = $stateParams.restaurantId;
-            this.restaurant = {
-                        id:0,
-                        name: 'Resto del la Muerta',
-                        adresse: '5 Rue des cadavres',
-                        description: 'Un restorent ou la mort par cannibalisme arrive souvant'
-                    };
+            this.finish = false;
+            this.lockValidation = false;
+            this.adresse;
+            this.restaurant;
+            
+            this.gotoHome = function(){
+                $state.go('restaurant');
+            }
+            this.loadRestaurant = function(){
+                ctrl.loading++;
+                $http({
+                    method: 'GET',
+                    url: '/service/getRestaurant',
+                    params : {id:this.restaurantId}
+                }).then(function successCallback(reponse){
+                    if(reponse.data.restaurant){
+                        ctrl.restaurant = reponse.data.restaurant;
+                    }else{
+                        ctrl.err="Une erreur imprevue est suvenu!";
+                        ctrl.lockValidation = true;
+                    }
+                    ctrl.loading--;
+                },function errorCallback(response) {
+                    ctrl.err="Un service distant n'est pas acécible actuelement. Veuillez resseyer plus tard!";
+                    ctrl.lockValidation = true;
+                    ctrl.loading--;
+                });
+            }
+            
             this.quantite = 1;
-            this.add = function(){
-                alert("NOT IMPLEMENTED !!! (commande-editor.comonent.js:l.43)");
-            };
-            this.setSelectedProduit= function(selectedProduit){
-                this.selectedProduit = selectedProduit;
-                this.quantite=1;
-            };
+            
             this.valider=function(){
-                alert("Commande valider[Not implemented]");
+                if(ctrl.lockValidation)return;
+                ctrl.lockValidation = true;
+                ctrl.loadingValidation = true;
+                $http({
+                    method: 'GET',
+                    url: '/service/traiterCommande',
+                }).then(function successCallback(reponse){
+                    if(reponse.error){
+                        ctrl.err="une erreur imprevue est suvenu!";
+                        ctrl.lockValidation = false;
+                    }else if(reponse.data.result){
+                        userService.reloadCard();
+                        ctrl.finish=true;
+                    }else{
+                        ctrl.err="La commande n'a pas pu étre valider!"
+                        ctrl.lockValidation = false;
+                    }
+                    ctrl.loadingValidation = false;
+                },function errorCallback(response) {
+                    ctrl.err="Un service distant n'est pas acécible actuelement. Veuillez resseyer plus tard!";
+                    ctrl.lockValidation = false;
+                    ctrl.loadingValidation = false;
+                });
             }
             this.annuler=function(){
-                alert("Commande annuler[Not implemented]");
+                if(ctrl.lockValidation)return;
+                $state.go('restaurant');
             }
             
             this.getLinkEditor = function(){
                 return $state.href('shop',{restaurantId:this.restaurantId}); 
             }
+            
+            
+            // MAINE OF VALIDATION :
+            userService.requirLogin('client',$scope,function(){
+                ctrl.loadRestaurant();
+                ctrl.adresse = userService.getUser().addresse;
+                ctrl.loading --; 
+            });
         }
     });

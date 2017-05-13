@@ -1,0 +1,58 @@
+<loading  ng-show="livreurCMD.loading"></loading>
+<div ng-hide="livreurCMD.loading">
+    ﻿<h1 style="text-align: center;">Interface livreur</h1>
+
+    <hr />
+
+    <h2>Votre commande actuelle</h2>
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="livreurCMD.err">
+        <button type="button" class="close" ng-click="livreurCMD.err = null;"><span aria-hidden="true">&times;</span></button>
+        <strong>ERREUR : !</strong> {{livreurCMD .err}}
+    </div>
+    <div class="panel panel-default">
+            <div class="panel-body" ng-if="!livreurCMD.hasCommande && livreurCMD.commandeCharger">
+                <p>Vous n'avez pas de commande pour le moment</p>
+            </div>
+            <div class="panel-body" ng-if="livreurCMD.hasCommande && livreurCMD.commandeCharger">
+                    <div class="row">
+                            <div class="col-md-6">
+                                    <table class="table table-bordered">
+                                            <tr style="background: lightgray;">
+                                                    <th>Nom</th>
+                                                    <th>Quantité</th>
+                                                    <th>Prix</th>
+                                            </tr>
+                                            <tr ng-repeat="produitItem in livreurCMD.commande.produitCommande">
+                                                    <td>{{produitItem.produit.denomination}}</td>
+                                                    <td>{{produitItem.qte}}</td>
+                                                    <td>{{produitItem.produit.prix * produitItem.qte}}</td>
+                                            </tr>
+                                    </table>
+                            </div>
+                            <div class="col-md-6">
+                                    <h3>Restaurant</h3>
+                                    <p>{{livreurCMD.restaurant.denomination}}</p>
+                                    <p>{{livreurCMD.restaurant.adresse}}</p>
+
+                                    <h3>Client</h3>
+                                    <p>{{livreurCMD.client.nom}}</p>
+                                    <p>{{livreurCMD.client.addresse}}</p>
+                            </div>
+                        <div class='clearfix'></div>
+                    </div>
+
+                    <div class="row">
+                        <loading ng-if="livreurCMD.loadValidation"></loading>
+                        <ul class="pager" ng-if="!livreurCMD.loadValidation && !livreurCMD.finish">
+                            <li class="next" ng-class="{disabled : livreurCMD.loadValidation}">
+                                <a href="" ng-click="livreurCMD.validerCommande();">Valider commande</a>
+                            </li>
+                        </ul>
+                        <div class="alert alert-success alert-dismissible" role="alert" ng-if="livreurCMD.finish">
+                            <strong>La commande est validée</strong>
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>

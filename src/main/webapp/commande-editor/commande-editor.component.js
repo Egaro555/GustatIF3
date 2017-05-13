@@ -3,46 +3,42 @@ angular.
     component('commandeEditor', {
         controllerAs: 'editorCMD',
         templateUrl: 'commande-editor/commande-editor.template.html',
-        controller: function RestaurantListController($stateParams,$state) {
-            this.loading = false;
+        controller: function RestaurantListController($stateParams,$http,$state,userService,$scope,commandeService) {
+            var ctrl = this;
             this.restaurantId = $stateParams.restaurantId;
-            this.produits = 
-            [
-                {
-                    id : 0,
-                    name : "Epanard en boite",
-                    description : "De la merde en boite",
-                    prix : 0.01
-                },
-                {
-                    id : 1,
-                    name : "Gaufres",
-                    description : "gaufre disponible chez votre machand de jouneaux du lundi au vendredi*. En plus la franchise est gratuite la plus pard du temp. * Uniquement si vous étes en catre",
-                    prix : 1.50
-                },
-                {
-                    id : 2,
-                    name : "Sucette",
-                    description : "Pour les petits mais pas les grands!",
-                    prix : 1.23
-                },
-                {
-                    id : 3,
-                    name : "Vin blanc",
-                    description : "vin rouge acheter sur le bon coin",
-                    prix : 8
-                },
-                {
-                    id : 4,
-                    name : "Vin rouge",
-                    description : "Du vin rouge couleur diable",
-                    prix : 666.01
-                }
-            ];
+            this.loading = 1;
+            this.addLoading = false;
             this.quantite = 1;
+            this.produitCharger = false;
+            this.loadArticle = function(){
+                ctrl.loading++;
+                $http({
+                    method: 'GET',
+                    url: '/service/searchProduits',
+                    params : {research:"",r:this.restaurantId}
+                }).then(function successCallback(reponse){
+                    if(reponse.data.produits){
+                        ctrl.produitCharger = true;
+                        ctrl.produits = reponse.data.produits;
+                    }else{
+                        ctrl.err = "Une erreur inprevue est survenu veuillez recherger la page";
+                    }
+                    ctrl.loading--;
+                },function errorCallback(response) {
+                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.loading--;
+                });
+            };
             this.add = function(){
-                this.selectedProduit = null;
-                alert("NOT IMPLEMENTED !!! (commande-editor.comonent.js:l.43)");
+                ctrl.addLoading = true;
+                commandeService.addProduit(ctrl.selectedProduit,ctrl.quantite,function(res){
+                    if(res.success){
+                        ctrl.selectedProduit = null;
+                    }else if(res.err){
+                        ctrl.err = res.err;
+                    }
+                    ctrl.addLoading = false;
+                });
             };
             this.setSelectedProduit= function(selectedProduit){
                 this.selectedProduit = selectedProduit;
@@ -51,5 +47,11 @@ angular.
             this.getLinkValidation = function(){
                 return $state.href('validation',{restaurantId:this.restaurantId}); 
             }
+            
+            // MAINE OF EDITOR :
+            userService.requirLogin('client',$scope,function(){
+                ctrl.loadArticle();
+                ctrl.loading --; 
+            });
         }
     })
