@@ -255,6 +255,27 @@ public class ActionServlet extends HttpServlet {
 
                 }
 
+            
+            } else if (serviceName.equals("getCommandeLivreur")) {
+
+                Auth requireAuth = Auth.LIVREUR;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    Commande commande = ((Livreur) user).getCmdeEnCours();
+
+                    if (commande != null) {
+                        resultPrinter.printCommandeAsJSON(commande);
+                    } else {
+                        resultPrinter.printBooleanResultAsJSON(false);
+                    }
+
+                }
+
             } else if (serviceName.equals("clearCommande")) {
 
                 Auth requireAuth = Auth.CLIENT;
@@ -385,6 +406,7 @@ public class ActionServlet extends HttpServlet {
                 HashMap<String, String> optionnalArgs = new HashMap();
 
                 requiredArgs.put("l", "Long : 'id' of livreur");
+                requiredArgs.put("c", "Long : 'id' of commande");
 
                 if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
@@ -395,7 +417,9 @@ public class ActionServlet extends HttpServlet {
                         cloturerCommandeLivreurAction action = new cloturerCommandeLivreurAction();
                         action.execute(request);
 
-                        resultPrinter.printBooleanResultAsJSON(true);
+                        boolean result = action.getResult();
+                        
+                        resultPrinter.printBooleanResultAsJSON(result);
                     } catch (Exception e) {
 
                         resultPrinter.printErrorAsJSON(e);
@@ -536,7 +560,7 @@ public class ActionServlet extends HttpServlet {
 
             } else if (serviceName.equals("getCommandesEnCours")) {
 
-                Auth requireAuth = Auth.LIVREUR;
+                Auth requireAuth = Auth.LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
@@ -635,6 +659,67 @@ public class ActionServlet extends HttpServlet {
                         boolean result = true;
 
                         resultPrinter.printBooleanResultAsJSON(result);
+
+                    } catch (Exception e) {
+
+                        resultPrinter.printErrorAsJSON(e);
+
+                    }
+                }
+
+            } else if (serviceName.equals("updateRestaurant")) {
+
+                Auth requireAuth = Auth.LIVREUR;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                requiredArgs.put("r", "Double : 'id' of restaurant");
+
+                optionnalArgs.put("denomination", "String");
+                optionnalArgs.put("description", "String");
+                optionnalArgs.put("adresse", "String");
+                optionnalArgs.put("latitude", "Double");
+                optionnalArgs.put("longitude", "Double");
+
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    try {
+                        updateRestaurantAction action = new updateRestaurantAction();
+                        action.execute(request);
+
+                        boolean result = action.getResult();
+
+                        resultPrinter.printBooleanResultAsJSON(result);
+
+                    } catch (Exception e) {
+
+                        resultPrinter.printErrorAsJSON(e);
+
+                    }
+                }
+
+                            
+            } else if (serviceName.equals("getRestaurant")) {
+
+                Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                requiredArgs.put("id", "Double : 'id' of restaurant");
+                
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    try {
+                        getRestaurantAction action = new getRestaurantAction();
+                        action.execute(request);
+
+                        Restaurant result = action.getResult();
+                     
+                        resultPrinter.printRestaurantAsJSON(result);
 
                     } catch (Exception e) {
 
