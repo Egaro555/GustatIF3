@@ -5,7 +5,7 @@
  */
 package com.insa.gustatif.web;
 
-import com.insa.gustatif.metier.modele.Restaurant;
+import com.insa.gustatif.metier.modele.Commande;
 import com.insa.gustatif.metier.service.ServiceMetier;
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,19 +13,18 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Benjamin
  */
-class getRestaurantAction implements Action {
-    
-    
-    Restaurant result;
+class getCommandeAction implements Action {
 
+    Commande commande;
+    
     @Override
     public void execute(HttpServletRequest request) {
-
-        result = ServiceMetier.getRestaurantById(Long.parseLong(request.getParameter("id")));
+ 
+        commande = ServiceMetier.getCommandeById(Long.parseLong(request.getParameter("id")));
     }
-
-    public Restaurant getResult() {
-        return result;
+    
+    Commande getResult() {
+        return commande;
     }
-
+    
 }

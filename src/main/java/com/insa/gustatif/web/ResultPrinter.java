@@ -48,11 +48,11 @@ class ResultPrinter {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         for (Restaurant r : restaurants) {
-        
+
             JsonObject jsonRestaurant = encodeRestaurantToJSON(r);
-            
+
             jsonListe.add(jsonRestaurant);
-  
+
         }
 
         JsonObject container = new JsonObject();
@@ -360,15 +360,24 @@ class ResultPrinter {
 
     JsonObject encodeRestaurantToJSON(Restaurant r) {
 
-            JsonObject jsonRestaurant = new JsonObject();
+        JsonObject jsonRestaurant = new JsonObject();
 
-            jsonRestaurant.addProperty("id", r.getId());
-            jsonRestaurant.addProperty("denomination", r.getDenomination());
-            jsonRestaurant.addProperty("description", r.getDescription());
-            jsonRestaurant.addProperty("adresse", r.getAdresse());
-            jsonRestaurant.addProperty("latitude", r.getLatitude());
-            jsonRestaurant.addProperty("longitude", r.getLongitude());
+        jsonRestaurant.addProperty("id", r.getId());
+        jsonRestaurant.addProperty("denomination", r.getDenomination());
+        jsonRestaurant.addProperty("description", r.getDescription());
+        jsonRestaurant.addProperty("adresse", r.getAdresse());
+        jsonRestaurant.addProperty("latitude", r.getLatitude());
+        jsonRestaurant.addProperty("longitude", r.getLongitude());
 
-            return jsonRestaurant;
+        return jsonRestaurant;
+    }
+
+    void printCommandeAsResult(Commande result) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        JsonObject container = new JsonObject();
+        container.add("restaurant", encodeCommandeToJSON(result));
+        String json = gson.toJson(container);
+        out.println(json);
     }
 }

@@ -701,25 +701,77 @@ public class ActionServlet extends HttpServlet {
                 }
 
                             
-            } else if (serviceName.equals("getRestaurant")) {
+            } else if (serviceName.equals("getClient")) {
 
                 Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
-                requiredArgs.put("id", "Double : 'id' of restaurant");
+                requiredArgs.put("id", "Double : 'id' of client");
                 
                 if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
                 } else {
 
                     try {
-                        getRestaurantAction action = new getRestaurantAction();
+                        getClientAction action = new getClientAction();
                         action.execute(request);
 
-                        Restaurant result = action.getResult();
+                        Client result = action.getResult();
                      
-                        resultPrinter.printRestaurantAsJSON(result);
+                        resultPrinter.printClientAsJSON(result);
+
+                    } catch (Exception e) {
+
+                        resultPrinter.printErrorAsJSON(e);
+
+                    }
+                }  
+            } else if (serviceName.equals("getClient")) {
+
+                Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                requiredArgs.put("id", "Double : 'id' of client");
+                
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    try {
+                        getClientAction action = new getClientAction();
+                        action.execute(request);
+
+                        Client result = action.getResult();
+                     
+                        resultPrinter.printClientAsJSON(result);
+
+                    } catch (Exception e) {
+
+                        resultPrinter.printErrorAsJSON(e);
+
+                    }
+                }                  
+            } else if (serviceName.equals("getCommandeById")) {
+
+                Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
+                HashMap<String, String> requiredArgs = new HashMap();
+                HashMap<String, String> optionnalArgs = new HashMap();
+
+                requiredArgs.put("id", "Double : 'id' of commande");
+                
+                if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
+                    resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
+                } else {
+
+                    try {
+                        getCommandeAction action = new getCommandeAction();
+                        action.execute(request);
+
+                        Commande result = action.getResult();
+                     
+                        resultPrinter.printCommandeAsResult(result);
 
                     } catch (Exception e) {
 
