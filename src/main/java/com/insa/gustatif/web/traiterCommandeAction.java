@@ -36,7 +36,7 @@ class traiterCommandeAction implements Action {
 
             ServiceMetier.traiterCommande(c);
 
-            session.setAttribute("commande", new Commande((Client) session.getAttribute("client"), new ArrayList(), null, null));
+            session.setAttribute("commande", new Commande((Client) session.getAttribute("user"), new ArrayList(), null, null));
 
             result = true;
         }
