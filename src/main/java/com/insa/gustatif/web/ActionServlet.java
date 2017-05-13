@@ -727,25 +727,25 @@ public class ActionServlet extends HttpServlet {
 
                     }
                 }  
-            } else if (serviceName.equals("getClient")) {
+            } else if (serviceName.equals("getRestaurant")) {
 
                 Auth requireAuth = Auth.CLIENT_OR_LIVREUR_OR_GESTIONNAIRE;
                 HashMap<String, String> requiredArgs = new HashMap();
                 HashMap<String, String> optionnalArgs = new HashMap();
 
-                requiredArgs.put("id", "Double : 'id' of client");
+                requiredArgs.put("id", "Double : 'id' of restaurant");
                 
                 if (serviceMissingRequirement(request, session, requireAuth, requiredArgs)) {
                     resultPrinter.printServiceRequirement(auth, requireAuth, requiredArgs, optionnalArgs);
                 } else {
 
                     try {
-                        getClientAction action = new getClientAction();
+                        getRestaurantAction action = new getRestaurantAction();
                         action.execute(request);
 
-                        Client result = action.getResult();
+                        Restaurant result = action.getResult();
                      
-                        resultPrinter.printClientAsJSON(result);
+                        resultPrinter.printRestaurantAsJSON(result);
 
                     } catch (Exception e) {
 
