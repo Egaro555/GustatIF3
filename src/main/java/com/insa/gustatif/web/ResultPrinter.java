@@ -376,7 +376,7 @@ class ResultPrinter {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         JsonObject container = new JsonObject();
-        container.add("restaurant", encodeCommandeToJSON(result));
+        container.add("commande", encodeCommandeToJSON(result));
         String json = gson.toJson(container);
         out.println(json);
     }
