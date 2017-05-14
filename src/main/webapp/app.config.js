@@ -27,12 +27,17 @@ angular.module('appGustatIF')
                 template : '<livreur></livreur>'
             })
             .state('gestionnaire', {
-                url: '/gestionnaire',
-                template : '<drones></drones>'
+                url: '/gestionnaire/:type',
+                template : '<livreurs-managers></livreurs-managers>'
+            })
+            .state('map', {
+                url: '/carte',
+                template : '<map></map>'
             })
             $urlRouterProvider.otherwise(function ($injector, $location) {
                 var $state = $injector.get('$state');
                 $state.go('login');
+                testc = $state;
                 /*
                 $state.go('defaultLayout.error', {
                     title: "Page not found",
@@ -42,3 +47,5 @@ angular.module('appGustatIF')
             });
 
     });
+    
+$(function(){$(".body-container").css("min-height",window.innerHeight-110);});

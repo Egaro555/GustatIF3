@@ -1,4 +1,4 @@
 // Define the `drones` module
-angular.module('drones',[
+angular.module('livreursManagers',[
     'login'
 ]);

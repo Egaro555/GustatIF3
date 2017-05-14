@@ -34,16 +34,17 @@ angular.
                         ctrl.produits.push(produits[i]);
                     }
                 }
-                if(produits.length < ctrl.produits){
-                    ctrl.produits=ctrl.produits.filter(function(prodFilted){
-                        for(var j=0;j<produits.length;j++){
-                            if(produits[j].id==prodFilted.id){
-                                return true;
-                            }
+                testd1=ctrl.produits;
+                testd2=produits;
+                console.log(testd1,"VS",testd2);
+                ctrl.produits=ctrl.produits.filter(function(prodFilted){
+                    for(var j=0;j<produits.length;j++){
+                        if(produits[j].produit.id==prodFilted.produit.id){
+                            return true;
                         }
-                        return false;
-                    });
-                }
+                    }
+                    return false;
+                });
             }
             this.getTotal = function(){
                 var total = 0;
@@ -92,7 +93,7 @@ angular.
             }
             $http({
                 method: 'GET',
-                url: '/service/setProduitCommande',
+                url: (qte==0?'/service/removeProduitCommande':'/service/setProduitCommande'),
                 params:{p:produitId,qte:qte}
             }).then(function successCallback(reponse){
                 if(reponse.data.commande){
@@ -146,8 +147,9 @@ angular.
         }
         var addProduit = function(produit, qte, callback){
             for(var i=0;i<card.produitCommande.length;i++){
-                if(card.produitCommande[i].id=produit.id){
-                    return setProduit(produit,qte + card.produitCommande[i].qte,callback)
+                if(card.produitCommande[i].produit.id==produit.id){
+                    console.log(card.produitCommande[i].produit,"SAME",produit);
+                    return setProduit(produit,qte + card.produitCommande[i].qte,callback);
                 }
             }
             return setProduit(produit,qte,callback);
@@ -178,7 +180,7 @@ angular.
             setProduit:setProduit,
             getProduits:getProduits,
             getCommande:getCommande,
-            reloadCard:reloadCard,
+            reloadCard :reloadCard ,
             isLoad:isLoad
         };
     });

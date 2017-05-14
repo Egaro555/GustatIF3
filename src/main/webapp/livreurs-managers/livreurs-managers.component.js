@@ -1,12 +1,13 @@
 // Register the `restaurantList` component on the `restaurantList` module,
 angular.
     module('appGustatIF').
-    component('drones', {
-        controllerAs : 'dronesCMD',
-        templateUrl: 'drones/drones.template.html',
-        controller: function RestaurantListController($scope,$http,$state,userService) {
+    component('livreursManagers', {
+        controllerAs : 'livreursManagerCMD',
+        templateUrl: 'livreurs-managers/livreurs-managers.template.html',
+        controller: function RestaurantListController($stateParams,$scope,$http,$state,userService) {
             var ctrl = this;
             
+            this.typeLivreur = $stateParams.type;
             this.loading = 1; // 
             this.detail = {
                 loading : 0,
@@ -82,36 +83,70 @@ angular.
                     });
                 }
             }
-            this.dronesCharger = false;
-            this.drones = [];
+            this.livreursCharger = false;
+            this.livreurs = [];
             
-            this.selectedDrone;
+            this.selectedLivreur;
             
-            this.loadDrone = function(){
-                ctrl.loading++;
+            this.reLoadLivreur = function(callback){
                 $http({
                     method: 'GET',
-                    url: '/service/findAllDrones'
+                    url: '/service/findAll'+ctrl.typeLivreur
                 }).then(function successCallback(reponse){
                     if(reponse.data.livreurs){
-                        ctrl.dronesCharger = true;
-                        ctrl.drones = reponse.data.livreurs;
+                        ctrl.livreursCharger = true;
+                        ctrl.livreurs = reponse.data.livreurs;
                     }else{
                         ctrl.err = "Une erreur est survenu a la validation de commande";
                     }
-                    ctrl.loading--;
+                    if(typeof callback == "function")
+                        callback();
                 },function errorCallback(response) {
                     ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
-                    ctrl.loading--;
+                    if(typeof callback == "function")
+                        callback();
                 });
+            };
+            this.loadLivreur = function(){
+                ctrl.loading++;
+                ctrl.reLoadLivreur(function(){ctrl.loading--;});
             };
             
             this.detailCommande = function(){
-                ctrl.detail.openDetail(ctrl.selectedDrone.cmdeEnCours);
+                ctrl.detail.openDetail(ctrl.selectedLivreur.cmdeEnCours);
             };
-            
+            this.detailCommande = function(){
+                ctrl.detail.openDetail(ctrl.selectedLivreur.cmdeEnCours);
+            };
+            this.cloturer = function(){
+                ctrl.loadValidation = true;
+                $http({
+                    method: 'GET',
+                    url: '/service/cloturerCommandeLivreur',
+                    params:{l:ctrl.selectedLivreur.id,c:ctrl.selectedLivreur.cmdeEnCours}
+                }).then(function successCallback(reponse){
+                    if(reponse.data.result){
+                        ctrl.finishCloture = true;
+                        ctrl.detail.show = false;
+                    }else{
+                        ctrl.err = "Une erreur est survenu a la validation de commande";
+                    }
+                    ctrl.loadValidation = false;
+                    ctrl.reLoadLivreur();
+                },function errorCallback(response) {
+                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.loadValidation = false;
+                });
+                ctrl.loadLivreur();
+            }
+            this.setSelectedLivreur=function(newSelect){
+                if(ctrl.loadValidation)return;
+                ctrl.selectedLivreur = newSelect;
+                ctrl.detail.show = false;
+                ctrl.finishCloture = false;
+            }
             userService.requirLogin('gestionnaire',$scope,function(){
-                ctrl.loadDrone();
+                ctrl.loadLivreur();
                 ctrl.loading --;
             });
         }

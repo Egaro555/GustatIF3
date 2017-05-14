@@ -7,22 +7,27 @@
             </a>
         </div>
         <div class="header-center">
-            <div class="header-statut">
-                <a class="btn btn-default hidden-xs">test1</a>
+            <div class="header-statut" ng-if="headerCMD.getBtnStatGroup()">
+                <a class="btn hidden-xs" ng-class="{{(headerCMD.getBtnStatGroup()[0].isCurantStat()?'btn-primary':'btn-default')}}" ng-href="{{headerCMD.getBtnStatGroup()[0].getHref();}}">{{headerCMD.getBtnStatGroup()[0].getTitre()}}</a>
                 <strong class="hidden-xs">&nbsp;>&nbsp;</strong>
-                <a class="btn btn-primary">test2</a>
+                    <a class="btn" ng-class="{{(headerCMD.getBtnStatGroup()[1].isCurantStat()?'btn-primary':'btn-default')}}" ng-href="{{headerCMD.getBtnStatGroup()[1].getHref();}}">{{headerCMD.getBtnStatGroup()[1].getTitre()}}</a>
                 <strong class="hidden-xs">&nbsp;>&nbsp;</strong>
-                <a class="btn btn-default hidden-xs">test3</a>
+                <a class="btn hidden-xs" ng-class="{{(headerCMD.getBtnStatGroup()[12].isCurantStat()?'btn-primary':'btn-default')}}" ng-href="{{headerCMD.getBtnStatGroup()[2].getHref();}}">{{headerCMD.getBtnStatGroup()[2].getTitre()}}</a>
             </div>
         </div>
         <div class="navbar-right">
-            <div class="btn-group navbar-btn">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="header.isLogin">
-                    {{header.user.nom}} {{header.user.prenom}} <span class="caret"></span>
+            <div class="btn-group navbar-btn" ng-show="headerCMD.isLogin">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{headerCMD.user.nom}} {{headerCMD.user.prenom}} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a ng-click="header.deconnexion()">Deconnexion</a></li>
+                    <li><a ng-click="headerCMD.deconnexion()">Deconnexion</a></li>
                 </ul>
+            </div>
+            <div class="btn-group navbar-btn" ng-if="!headerCMD.isLogin">
+                <button type="button" ng-click="headerCMD.goto('login')" class="btn btn-default">
+                    Connexion
+                </button>
             </div>
         </div>
     </div>

@@ -1,182 +1,90 @@
-﻿
-<html ng-app="appGustatIF">
-    <head>
-        <title>Gustat'IF - Liste des Restaurants</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-
-		<link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="http://localhost:8080/css/style.css" />
 		
-	</head>
-	
-   <body>
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
-                      <img alt="Logo" src="...">
-                    </a>
-                </div>
-                <div class="header-center">
-                    <div class="header-statut">
-                        <a class="btn btn-default hidden-xs">Drones</a>
 
-                        <a class="btn btn-primary">Vélos</a>
+<script>
+    var map;
+    var libLoaded = false;
+    var dataWatingLib = [];
+    var markers=[];
+    var addMarker = function (data) {
+        var label = "?";
+        var position = {lat : 0, lng: 0};						
 
-                        <a class="btn btn-default hidden-xs">Carte</a>
-                    </div>
-                </div>
-                <div class="navbar-right">
-                    <div class="btn-group navbar-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            UserName <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Deconection</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <ul class="nav" style="position : fixed; z-index: 9000; top:50px;">
-            <li><a ui-sref="restaurantListe">Restaurant</a></li>
-        </ul>
-        <div class="container body-container">
-            <div ui-view>
-				
-				<h1 style="text-align: center;">Gustat'IF Carte</h1>
-				
-				<hr />				
-				
-				<div id="map" style="height: 550px;width: 100%;"></div>
-				
-				<br />
-    <script>
-	
-	
-	
-      function initMap() {
-	  
+        if("drone" in data) {
+                label = '✈';
+                position = {lat : data.drone.latitude, lng : data.drone.longitude};
+                content = "<h3 style='margin-bottom: 5px;'>Drône livreur</h3>Adresse : " + data.drone.adresse;
+        }
+        else if("livreur" in data) {
+                label = '🚲';
+                position = {lat : data.livreur.latitude, lng : data.livreur.longitude};
+                content = "<h3 style='margin-bottom: 5px;'>Livreur \""+data.livreur.prenom+ " " + data.livreur.nom+"\"</h3>Adresse : " + data.livreur.adresse;
+        }
+        else if("restaurant" in data) {
+                label = '🍴';
+                position = {lat : data.restaurant.latitude, lng : data.restaurant.longitude};			
+                content = "<h3 style='margin-bottom: 5px;'>Restaurant \""+data.restaurant.denomination+"\"</h3>Adresse : " + data.restaurant.adresse;
 
-	  
-			var map = new google.maps.Map(document.getElementById('map'), {
-			  zoom: 0,
-			  center: {lat: 25.363, lng: 25}
-			});
-			
-			var markers = [];
+        }
 
-			addMarker = function (map, data) {
-			
-				var label = "?";
-				var position = {lat : 0, lng: 0};						
-						
-				if("drone" in data) {
-					label = '✈';
-					position = {lat : data.drone.latitude, lng : data.drone.longitude};
-					content = "<h3 style='margin-bottom: 5px;'>Drône livreur</h3>Adresse : " + data.drone.adresse;
-				}
-				else if("livreur" in data) {
-					label = '🚲';
-					position = {lat : data.livreur.latitude, lng : data.livreur.longitude};
-					content = "<h3 style='margin-bottom: 5px;'>Livreur \""+data.livreur.prenom+ " " + data.livreur.nom+"\"</h3>Adresse : " + data.livreur.adresse;
-				}
-				else if("restaurant" in data) {
-					label = '🍴';
-					position = {lat : data.restaurant.latitude, lng : data.restaurant.longitude};			
-					content = "<h3 style='margin-bottom: 5px;'>Restaurant \""+data.restaurant.denomination+"\"</h3>Adresse : " + data.restaurant.adresse;
+        var marker = new google.maps.Marker({
+        label : label,
+        position : position,
+        map: map
+        });
 
-				}
-				
-				var marker = new google.maps.Marker({
-				label : label,
-				position : position,
-				map: map
-				});
-	
-				var infowindow = new google.maps.InfoWindow({
-				  content: content
-				});
-				
-				marker.infowindow = infowindow;
+        var infowindow = new google.maps.InfoWindow({
+          content: content
+        });
 
-				marker.addListener('mouseover', function() {
-				
-					for(var m in markers)  {
-						markers[m].infowindow.close();
-					}
-				
-					infowindow.open(map, marker);
-				});					
+        marker.infowindow = infowindow;
+        marker.addListener('mouseover', function() {
 
-				return marker;
-			
-			};		
+                for(var m in markers)  {
+                        markers[m].infowindow.close();
+                }
 
-		data = [
-			{ "drone" : {
-				"latitude" : 25,
-				"longitude" : 25,
-				"adresse" : "osef"
-				}
-			},
-			{ "restaurant" : {
-				"latitude" : 30,
-				"longitude" : 25,
-				"denomination" : "Bien rôti",
-				"adresse" : "osef"
-				}
-			},
-			{ "livreur" : {
-				"latitude" : 25,
-				"longitude" : 30,
-				"prenom" : "Benjamin",
-				"nom" : "Chazelle",
-				"adresse" : "osef"
-				}
-			},
-			{ "drone" : {
-				"latitude" : 35,
-				"longitude" : 25,
-				"adresse" : "osef"
-				}
-			}		
-		];
-			
-		for(d in data) {
+                infowindow.open(map, marker);
+        });					
 
-			markers.push(addMarker(map, data[d]));
+        return markers.push(marker);
 
-		}
-      }
+    };
+    var init = function(){
+        if(!libLoaded)return;
+        if(!map){
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 0,
+                center: {lat: 25.363, lng: 25}
+            });
+        }
+        markers = [];
+    };
+    var push = function(data){
+        if(libLoaded){
+            addMarkers(map,data);
+        }else{
+            dataWatingLib.push(data);
+        }
+    };
+    var clean = function(){
+        if(libLoaded){
+            init();
+        }else{
+            dataWatingLib = [];
+        }
+    };
+    mapControler  = {
+        push:push,
+        clean:clean
+    };
+    function onLibMapLoad() {
+        libLoaded = true;
+        mapControler.init();
+        for(d in dataWatingLib) {
+            mapControler.addMarker(dataWatingLib[d]);
+        }
+    }
     </script>
 
 	
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWsRSki1A-M5oD0xory0qSX2bYcqGivmU&callback=initMap"> </script>
- 
-						
-
-						
-
-			
-			
-			</div>
-        </div>
-        <footer class="footer">
-            <div class="container">
-                <div class="col-sm-4 text-left-not-xs text-center-xs">
-                    <a href=" ">Conditions d'utilisation</a>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <a href=" ">politique de confidentialité</a>
-                </div>
-                <div class="col-sm-4 text-right-not-xs text-center-xs">
-                    <a href=" ">Mentions légales</a>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </footer>
-    </body>
-</html>
-   
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWsRSki1A-M5oD0xory0qSX2bYcqGivmU&callback=onLibMapLoad"> </script>

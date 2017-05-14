@@ -16,8 +16,9 @@ and open the template in the editor.
         <script src="/js/bootstrap.min.js"></script>
         
 	<script src="/angular-1.6.4/angular.min.js"></script>
-	<script src="/angular-1.6.4/angular-cookies.min.js"></script>
 	<script src="/angular-1.6.4/angular-ui-router.js"></script>
+        
+        <script src="js/basemap.js"></script>
         
         <script src="app.module.js"></script>
         
@@ -37,17 +38,16 @@ and open the template in the editor.
         <script src="wgif-header/wgif-header.component.js"></script>
         <script src="livreur/livreur.module.js"></script>
         <script src="livreur/livreur.component.js"></script>
-        <script src="drones/drones.module.js"></script>
-        <script src="drones/drones.component.js"></script>
+        <script src="livreurs-managers/livreurs-managers.module.js"></script>
+        <script src="livreurs-managers/livreurs-managers.component.js"></script>
+        <script src="map/map.module.js"></script>
+        <script src="map/map.component.js"></script>
         
         <script src="app.config.js"></script>
         
     </head>
     <body>
         <wgif-header></wgif-header>
-        <ul class="nav" style="position : fixed; z-index: 9000; top:50px;">
-            <li><a ui-sref="restaurantListe">Restaurant</a></li>
-        </ul>
         <div class="container body-container">
             <div ui-view></div>
         </div>
@@ -65,5 +65,6 @@ and open the template in the editor.
                 <div class="clearfix"></div>
             </div>
         </footer>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWsRSki1A-M5oD0xory0qSX2bYcqGivmU&callback=onLibMapLoad"> </script>
     </body>
 </html>

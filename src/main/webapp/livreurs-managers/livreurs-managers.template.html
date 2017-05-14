@@ -1,0 +1,132 @@
+<div ng-if="livreursManagerCMD.loading">
+    <loading></loading>
+</div>
+<div ng-if="!livreursManagerCMD.loading">
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="livreursManagerCMD.err">
+        <button type="button" class="close" ng-click="livreursManagerCMD.err = null;"><span aria-hidden="true">&times;</span></button>
+        <strong>ERREUR : !</strong> {{livreursManagerCMD.err}}
+    </div>
+    <h1 style="text-align: center;">Interface Gestionnaire</h1>
+    <h2>Liste des drônes</h2>
+    <hr />				
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
+               <div class="input-group-addon">
+                    <div style="transform: rotate(45deg);font-size: 18px;font-weight: bold;">
+                            &#9906;
+                    </div>
+               </div>
+                <input class="form-control" id="email" name="email" type="text" ng-model="livreursManagerCMD.search"/>
+            </div>
+            <br />
+            <table class="table table-bordered">
+
+                    <tr style="background: lightgray;">
+                            <th>Code</th>
+                            <th>Adresse</th>
+                            <th>Dispo</th>
+                            <th>Vitesse Moy</th>
+                            <th>Poids max</th>
+                    </tr>
+
+                    <tr ng-class="{active : livreur == livreursManagerCMD.selectedLivreur}" ng-repeat="livreur in livreursManagerCMD.livreurs  | filter:livreursManagerCMD.search" ng-click="livreursManagerCMD.setSelectedLivreur(livreur)">
+                            <td>{{livreur.type}} {{livreur.id}}</td>
+                            <td>{{livreur.addresse}}</td>
+                            <td>{{(livreur.cmdeEnCours===null?"oui":"non")}}</td>
+                            <td>{{(livreur.type=="Drone"?livreur.vitesseMoyenne+"km/h":"")}}</td>
+                            <td>{{livreur.chargeMaxi}}g</td>
+                    </tr>
+            </table>
+
+        </div>
+
+        <div class="col-md-6" ng-if="livreursManagerCMD.selectedLivreur && !livreursManagerCMD.detail.show">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>{{livreursManagerCMD.selectedLivreur.type}} n°{{livreursManagerCMD.selectedLivreur.id}}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p ng-if="livreursManagerCMD.selectedLivreur.type=='Velo'">Nom : {{livreursManagerCMD.selectedLivreur.nom}}</p>
+                            <p ng-if="livreursManagerCMD.selectedLivreur.type=='Velo'">Prenom : {{livreursManagerCMD.selectedLivreur.prenom}}</p>
+                            <p>Adresse : {{livreursManagerCMD.selectedLivreur.addresse}}</p>
+                            <p>Disponibilité : {{(livreursManagerCMD.selectedLivreur.cmdeEnCours===null?"OUI":"NON")}}</p>
+                            <p ng-if="livreursManagerCMD.selectedLivreur.type=='Drone'">Vitesse moyenne : {{livreursManagerCMD.selectedLivreur.vitesseMoyenne}} km/h</p>
+                            <p ng-if="livreursManagerCMD.selectedLivreur.type=='Velo'">Email : {{livreursManagerCMD.selectedLivreur.mail}}</p>
+                            <p>Poids max : {{livreursManagerCMD.selectedLivreur.chargeMaxi}}g</p>
+                        </div>
+                        <div class="col-sm-6" ng-if="!livreursManagerCMD.finishCloture">
+                            <loading ng-if="livreursManagerCMD.loadValidation"></loading>
+                            <button type="button" class="btn btn-default btn-sm" ng_if="livreursManagerCMD.selectedLivreur.cmdeEnCours!=null && !livreursManagerCMD.loadValidation" ng-click="livreursManagerCMD.detailCommande()">Détails Commande</button><br /><br />
+                            <button type="button" class="btn btn-default btn-sm" ng_if="livreursManagerCMD.selectedLivreur.cmdeEnCours!=null && !livreursManagerCMD.loadValidation" ng-click="livreursManagerCMD.cloturer()">Clôturer Commande</button>
+                        </div>
+                        <div class="col-sm-6" ng-if="livreursManagerCMD.finishCloture">
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <strong>Commande clôturée</strong>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>						
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="livreursManagerCMD.detail.show">
+            <div class="panel panel-default" ng-if="livreursManagerCMD.detail.show">
+                <div class="panel-heading">
+                    <h3>{{livreursManagerCMD.selectedLivreur.type}} n°{{livreursManagerCMD.selectedLivreur.id}}</h3>
+                </div>
+                <div class="panel-body" ng-if="livreursManagerCMD.detail.loading">
+                    <loading></loading>
+                </div>
+                <div class="panel-body" ng-if="livreursManagerCMD.detail.err">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" ng-click="livreursManagerCMD.detail.err = null;"><span aria-hidden="true">&times;</span></button>
+                        <strong>ERREUR : !</strong> {{livreursManagerCMD.detail.err}}
+                    </div>
+                </div>
+                <div class="panel-body" ng-if="livreursManagerCMD.detail.charger">
+                    <h4>Commande n°{{livreursManagerCMD.detail.commande.numCommande}}</h3>
+                    <strong>date de la Commande :</strong>{{livreursManagerCMD.detail.commande.dateCommande}}<br/>
+                    <br>
+                    <h4>Client</h4>
+                    <strong>Nom :</strong>{{livreursManagerCMD.detail.client.nom}}<br/>
+                    <strong>Adresse :</strong>{{livreursManagerCMD.detail.client.addresse}}<br/>
+                    <strong>mail :</strong>{{livreursManagerCMD.detail.client.mail}}<br/>
+                    <br>
+                    <h4>Restaurant</h4>
+                    <strong>Nom :</strong>{{livreursManagerCMD.detail.restaurant.denomination}}<br/>
+                    <strong>Adresse :</strong>{{livreursManagerCMD.detail.restaurant.adresse}}<br/>
+                    <br>
+                    <h4>Produis</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="produitItem in livreursManagerCMD.detail.commande.produitCommande">
+                                <td>{{produitItem.produit.denomination}}</td>
+                                <td>{{produitItem.qte}}</td>
+                                <td>{{produitItem.qte*produitItem.produit.prix}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <strong>Poids total :</strong>{{livreursManagerCMD.detail.commande.poidsTotal}} g<br/>
+                    <strong>Total :</strong>{{livreursManagerCMD.detail.commande.prixTotal}} E<br/>
+                    <loading ng-if="livreursManagerCMD.loadValidation"></loading>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="livreursManagerCMD.detail.show = false">Retour</button>
+                    <button type="button" class="btn btn-default btn-sm" ng-class="{disabled:livreursManagerCMD.loadValidation}" ng-click="livreursManagerCMD.cloturer()">Clôturer Commande</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+						

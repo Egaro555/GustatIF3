@@ -16,7 +16,7 @@
                 <td>
                     <loading ng-show="produitItems.load"></loading>
                     <div class="input-group input-group-sm" ng-show="produitItems.edit && !produitItems.load">
-                        <input style="min-width: 56px;" type="number" class="form-control" ng-model="produitItems.qte_tmp" min="1">
+                        <input style="min-width: 56px;" type="number" class="form-control" ng-model="produitItems.qte_tmp" min="0">
                         <span class="input-group-btn">
                             <button class="btn btn-success" type="button" ng-click="detailCMD.setQte(produitItems)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
                             <button class="btn btn-danger" type="button" ng-click="produitItems.edit=false;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>

@@ -3,7 +3,7 @@ angular.
     component('commandeValidation', {
         controllerAs: 'validationCMD',
         templateUrl: 'commande-validation/commande-validation.template.html',
-        controller: function RestaurantListController($state,$http,$scope, $stateParams,$state,userService) {
+        controller: function RestaurantListController($state,$http,$scope, $stateParams,$state,userService,commandeService) {
             var ctrl = this;
             this.loading = 1;
             this.loadingValidation = false;
@@ -51,13 +51,14 @@ angular.
                         ctrl.err="une erreur imprevue est suvenu!";
                         ctrl.lockValidation = false;
                     }else if(reponse.data.result){
-                        userService.reloadCard();
                         ctrl.finish=true;
+                    ctrl.loadingValidation = false;
+                        commandeService.reloadCard();
                     }else{
                         ctrl.err="La commande n'a pas pu étre valider!"
                         ctrl.lockValidation = false;
+                        ctrl.loadingValidation = false;
                     }
-                    ctrl.loadingValidation = false;
                 },function errorCallback(response) {
                     ctrl.err="Un service distant n'est pas acécible actuelement. Veuillez resseyer plus tard!";
                     ctrl.lockValidation = false;

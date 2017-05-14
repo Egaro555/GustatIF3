@@ -1,0 +1,15 @@
+<div ng-if="mapCMD.loading">
+    <loading></loading>
+</div>
+<div ng-if="!mapCMD.loading">
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="mapCMD.err">
+        <button type="button" class="close" ng-click="mapCMD.err = null;"><span aria-hidden="true">&times;</span></button>
+        <strong>ERREUR : !</strong> {{mapCMD.err}}
+    </div>
+    <h1 style="text-align: center;">Gustat'IF Carte</h1>
+    <hr />
+    <div id="map" style="height: 550px;width: 100%;"></div>
+    <br />
+</div>
+
+						
