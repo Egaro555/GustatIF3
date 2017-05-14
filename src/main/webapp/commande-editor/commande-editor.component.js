@@ -21,11 +21,11 @@ angular.
                         ctrl.produitCharger = true;
                         ctrl.produits = reponse.data.produits;
                     }else{
-                        ctrl.err = "Une erreur inprevue est survenu veuillez recherger la page";
+                        ctrl.err = "Une erreur imprévue est survenue veuillez recharger la page";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur ! Veuillez réessayer ultérieurement";
                     ctrl.loading--;
                 });
             };

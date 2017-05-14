@@ -98,11 +98,11 @@ angular.
                         callback({success:true});
                 }else{
                     if(typeof callback == "function")
-                        callback({err:"La commande na pas pu étre changer, merci de bien vouloir recharger la page"});
+                        callback({err:"La commande na pas pu être mise à jour, merci de bien vouloir recharger la page"});
                 }
             }, function errorCallback(response) {
                 if(typeof callback == "function")
-                    callback({err:"Le service est ectuellement indisponible"});
+                    callback({err:"Le service est actuellement indisponible"});
             });
         }
         var reloadCard = function(callback){

@@ -33,12 +33,12 @@ angular.
                     if(reponse.data.restaurant){
                         ctrl.restaurant = reponse.data.restaurant;
                     }else{
-                        ctrl.err="Une erreur imprevue est suvenu!";
+                        ctrl.err="Une erreur imprévue est suvenue !";
                         ctrl.lockValidation = true;
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
-                    ctrl.err="Un service distant n'est pas acécible actuelement. Veuillez resseyer plus tard!";
+                    ctrl.err="Un service distant n'est pas accessible actuellement. Veuillez réessayer ultérieurement";
                     ctrl.lockValidation = true;
                     ctrl.loading--;
                 });
@@ -55,19 +55,19 @@ angular.
                     url: '/service/traiterCommande',
                 }).then(function successCallback(reponse){
                     if(reponse.error){
-                        ctrl.err="une erreur imprevue est suvenu!";
+                        ctrl.err="Une erreur imprévue est suvenue !";
                         ctrl.lockValidation = false;
                     }else if(reponse.data.result){
                         ctrl.finish=true;
                     ctrl.loadingValidation = false;
                         commandeService.reloadCard();
                     }else{
-                        ctrl.err="La commande n'a pas pu étre valider!"
+                        ctrl.err="La commande n'a pas pu être valider !"
                         ctrl.lockValidation = false;
                         ctrl.loadingValidation = false;
                     }
                 },function errorCallback(response) {
-                    ctrl.err="Un service distant n'est pas acécible actuelement. Veuillez resseyer plus tard!";
+                    ctrl.err="Un service distant n'est pas accessible actuellement. Veuillez réessayer ultérieurement";
                     ctrl.lockValidation = false;
                     ctrl.loadingValidation = false;
                 });

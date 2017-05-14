@@ -29,12 +29,12 @@ angular.
                             }
                         }
                     }else{
-                        ctrl.err = "Une erreur est survenu a la validation de commande";
+                        ctrl.err = "Une erreur est survenue lors de la validation de commande";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
                     ctrl.loading--;
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur! Veuillez réessayer ultérieurement";
                 });
             };
             this.loadRestaurant = function(){
@@ -50,12 +50,12 @@ angular.
                             mapControler.push({restaurant:restaurant});
                         }
                     }else{
-                        ctrl.err = "Une erreur est survenu";
+                        ctrl.err = "Une erreur est survenue lors de la validation de commande";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
                     ctrl.loading--;
+                    ctrl.err = "Erreur de connexion avec le serveur! Veuillez réessayer ultérieurement";
                 });
             };
             userService.requirLogin('gestionnaire',$scope,function(){
