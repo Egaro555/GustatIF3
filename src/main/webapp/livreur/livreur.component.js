@@ -19,11 +19,11 @@ angular.
                         ctrl.restaurant = reponse.data.restaurant;
                     }else{
                         ctrl.commandeCharger = false;
-                        ctrl.err = "Une erreur imprevue est survenu veuillez recherger la page";
+                        ctrl.err = "Une erreur imprévue est survenue, veuillez recharger la page";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur ! Veuillez réessayer ultérieurement";
                     ctrl.commandeCharger = false;
                     ctrl.loading--;
                 });
@@ -39,12 +39,12 @@ angular.
                         ctrl.client = reponse.data.client;
                     }else{
                         ctrl.commandeCharger = false;
-                        ctrl.err = "Une erreur imprevue est survenu veuillez recherger la page";
+                        ctrl.err = "Une erreur imprévue est survenue, veuillez recharger la page";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
                     ctrl.commandeCharger = false;
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur ! Veuillez réessayer ultérieurement";
                     ctrl.loading--;
                 });
             }
@@ -63,11 +63,11 @@ angular.
                         ctrl.loadClient();
                         ctrl.loadRestaurant();
                     }else{
-                        ctrl.err = "Une erreur imprevue est survenu veuillez recherger la page";
+                        ctrl.err = "Une erreur imprévue est survenue, veuillez recharger la page";
                     }
                     ctrl.loading--;
                 },function errorCallback(response) {
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur ! Veuillez réessayer ultérieurement";
                     ctrl.loading--;
                 });
             };
@@ -82,11 +82,11 @@ angular.
                     if(reponse.data.result){
                         ctrl.finish = true;
                     }else{
-                        ctrl.err = "Une erreur est survenu a la validation de commande";
+                        ctrl.err = "Une erreur est survenue lors la validation de commande";
                     }
                     ctrl.loadValidation = false;
                 },function errorCallback(response) {
-                    ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.err = "Erreur de connexion avec le serveur ! Veuillez réessayer ultérieurement";
                     ctrl.loadValidation = false;
                 });
             }

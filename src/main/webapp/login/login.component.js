@@ -131,7 +131,7 @@ angular.
                     url = '/service/connexionGestionnaire'
                     break;
                 default:
-                    callback({err:"Erreur du navigateur inatendu!"});
+                    callback({err:"Erreur du navigateur inattendue !"});
                     return;
             }
             $http({
@@ -156,12 +156,12 @@ angular.
                     $rootScope.$emit('login-event');
                 }else{
                     console.log(reponse.data);
-                    callback({err:"Connexion imposible! Verifier vos idantifiant"});
+                    callback({err:"Connexion impossible ! Vérifier vos identifiants"});
                     return;
                 }
                 callback({success:true});
             }, function errorCallback(response) {
-                callback({err:"Erreur de connexion avec le servic demander. Reeseyer plus tard."});
+                callback({err:"Erreur de connexion avec le service demandé. Réessayer plus tard."});
             });
         }
         var logout = function(callback){

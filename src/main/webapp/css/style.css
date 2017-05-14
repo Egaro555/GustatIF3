@@ -36,6 +36,10 @@ body {
     
 }
 
+.input-group-addon.glyphicon {
+    top:0;
+}
+
 
 /** TEXT RESPONSIVE **/
 .text-left-not-xs, .text-left-not-sm, .text-left-not-md, .text-left-not-lg {
