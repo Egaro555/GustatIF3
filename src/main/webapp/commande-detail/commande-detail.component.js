@@ -18,7 +18,6 @@ angular.
                     commandeItem.load = false;
                 });
             }
-            test5 = false;
             var refreachProduits = function(produits){
                 for(var i=0;i<produits.length;i++){
                     var target = null;
@@ -34,9 +33,6 @@ angular.
                         ctrl.produits.push(produits[i]);
                     }
                 }
-                testd1=ctrl.produits;
-                testd2=produits;
-                console.log(testd1,"VS",testd2);
                 ctrl.produits=ctrl.produits.filter(function(prodFilted){
                     for(var j=0;j<produits.length;j++){
                         if(produits[j].produit.id==prodFilted.produit.id){
@@ -54,10 +50,7 @@ angular.
                 return total;
             };
             commandeService.onLoad($scope,function(){
-                test2 = commandeService.getProduits();
-                test3 = commandeService;
                 refreachProduits(commandeService.getProduits());
-                console.log("onLoad commande-detail");
                 ctrl.loading--;
             });
             commandeService.onUpdate($scope,function(){
@@ -67,12 +60,9 @@ angular.
                 this.loading++;
                 ctrl.produits = [];
             });
-            
-            test = this;
-            console.log(this);
         },
     })
-    .factory('commandeService', function($state,$http,$rootScope,userService) {
+    .factory('commandeService', function($state,$http,$rootScope,userService,$timeout) {
         var card = null;
         var cardLoaded = false;
         var onRefresh = false;
@@ -98,7 +88,6 @@ angular.
             }).then(function successCallback(reponse){
                 if(reponse.data.commande){
                     card = reponse.data.commande;
-                    test10 = reponse;
                     if(cardLoaded){
                         $rootScope.$emit('commande-editor-update-event');
                     }else{
@@ -123,6 +112,7 @@ angular.
             }).then(function successCallback(reponse){
                 if(reponse.data.commande){
                     card = reponse.data.commande;
+                    
                     if(cardLoaded){
                         $rootScope.$emit('commande-editor-update-event');
                     }else{
@@ -145,14 +135,26 @@ angular.
             var handler= $rootScope.$on('commande-editor-load-event', callback);
             scope.$on('$destroy', handler);
         }
+        var cleanCard = function(){
+            $http({
+                method: 'GET',
+                url: '/service/clearCommande'
+            }).then(function successCallback(reponse){
+                reloadCard();
+            }, function errorCallback(response) {
+                reloadCard();
+            });
+        }
         var addProduit = function(produit, qte, callback){
             for(var i=0;i<card.produitCommande.length;i++){
                 if(card.produitCommande[i].produit.id==produit.id){
-                    console.log(card.produitCommande[i].produit,"SAME",produit);
                     return setProduit(produit,qte + card.produitCommande[i].qte,callback);
                 }
             }
             return setProduit(produit,qte,callback);
+        }
+        var isEmpty = function(){
+            return !card || !card.produitCommande || card.produitCommande.length == 0;
         }
         var getProduits = function(){
             return card.produitCommande;
@@ -164,13 +166,19 @@ angular.
             return cardLoaded;
         }
         userService.onLogout($rootScope,function(){
-            cardLoaded = false; 
+            cardLoaded = false;
             $rootScope.$emit('commande-editor-unload-event'); 
         });
         userService.onLogin($rootScope,function(){
             reloadCard();
         });
-        
+        (function(){
+            var f={};
+            f.callback=function(){
+                setTimeout(reloadCard,500,f.callback);
+            };
+            f.callback();
+        })();
         
         return {
             onUpdate:onUpdate,
@@ -181,6 +189,8 @@ angular.
             getProduits:getProduits,
             getCommande:getCommande,
             reloadCard :reloadCard ,
+            cleanCard:cleanCard,
+            isEmpty:isEmpty,
             isLoad:isLoad
         };
     });

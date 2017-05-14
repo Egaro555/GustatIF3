@@ -20,18 +20,18 @@
             </tr>
         </tbody>
     </table>
-    <h3>Votre panier :</h3>
-    <commande-detail></commande-detail>
-    <loading  ng-if="validationCMD.loadingValidation"></loading>
+    <h3 ng-if="!validationCMD.finish">Votre panier :</h3>
+    <commande-detail ng-if="!validationCMD.finish"></commande-detail>
     <div class="alert alert-success alert-dismissible" role="alert" ng-if="validationCMD.finish">
         <strong> Votre commande a bien étais enregister !</strong></br>
         Bonne Apétit<br>
         <a href="" ng-click="validationCMD.gotoHome()">Retour a la liste des restaurant</a>
         
     </div>
+    <loading  ng-if="validationCMD.loadingValidation"></loading>
     <ul class="pager">
         <li class="previous"><a ng-href="{{validationCMD.getLinkEditor()}}">Retour</a></li>
-        <li class="next" ng-class="{disabled : validationCMD.lockValidation}"><a href="" ng-click="validationCMD.valider()">Valider</a></li>
+        <li class="next" ng-if="!validationCMD.cardIsEmpty" ng-class="{disabled : validationCMD.lockValidation}"><a href="" ng-click="validationCMD.valider()">Valider</a></li>
         <li class="next" ng-class="{disabled : validationCMD.lockValidation}"><a href="" ng-click="validationCMD.annuler()">Annuler</a></li>
     </ul>
 </div>

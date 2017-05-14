@@ -19,7 +19,7 @@ angular.
                     if(reponse.data.livreurs){
                         ctrl.livreurs = reponse.data.livreurs;
                         for(var l in ctrl.livreurs){
-                            var livreur = livreurs[l];
+                            var livreur = ctrl.livreurs[l];
                             if(livreur.type=="Drone"){
                                 mapControler.push({drone:livreur});
                             }else if(livreur.type=="Velo"){
@@ -31,7 +31,9 @@ angular.
                     }else{
                         ctrl.err = "Une erreur est survenu a la validation de commande";
                     }
+                    ctrl.loading--;
                 },function errorCallback(response) {
+                    ctrl.loading--;
                     ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
                 });
             };
@@ -39,24 +41,26 @@ angular.
                 ctrl.loading++;
                 $http({
                     method: 'GET',
-                    url: '/service/findAllLivreurs'
+                    url: '/service/findAllRestaurants'
                 }).then(function successCallback(reponse){
                     if(reponse.data.restaurants){
                         ctrl.restaurants = reponse.data.restaurants;
                         for(var r in ctrl.restaurants){
-                            var restaurant = restaurants[r];
+                            var restaurant = ctrl.restaurants[r];
                             mapControler.push({restaurant:restaurant});
                         }
                     }else{
-                        ctrl.err = "Une erreur est survenu a la validation de commande";
+                        ctrl.err = "Une erreur est survenu";
                     }
+                    ctrl.loading--;
                 },function errorCallback(response) {
                     ctrl.err = "Erreur de connexion avec le server! Veuiller resseiller ulterieurment";
+                    ctrl.loading--;
                 });
             };
             userService.requirLogin('gestionnaire',$scope,function(){
                 ctrl.loadLivreur();
-                ctrl.loadRestauranr();
+                ctrl.loadRestaurant();
                 ctrl.loading --;
             });
         }

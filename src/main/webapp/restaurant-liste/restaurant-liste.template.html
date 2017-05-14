@@ -46,6 +46,8 @@
     </div>
     <div class="clearfix"></div>
     <ul class="pager">
-        <li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next"><a ng-href="{{restaurantes.getLinkSelectedRestaurante()}}">choisir</a></li>
+        <li ng-class="{'disabled' : restaurantes.selectedRestaurante==null}" class="next">
+            <a href="" ng-click="restaurantes.editSelectedRestaurante();">choisir</a>
+        </li>
     </ul>
 </div>

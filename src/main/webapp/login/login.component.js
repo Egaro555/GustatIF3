@@ -4,8 +4,9 @@ angular.
     component('login', {
         controllerAs : 'login',
         templateUrl: 'login/login.template.html',
-        controller: function RestaurantListController($scope, $state, userService) {
+        controller: function RestaurantListController($http,$scope, $state, userService) {
             var ctrl = this;
+            console.log(this.rand);
             this.loading = true;
             if(!this.user_type){
                 this.user_type='client';
@@ -26,9 +27,19 @@ angular.
                     ctrl.loading = false;
                 }
             };
+            this.randCfg=function(){
+                var r = Math.round(Math.random()*10000);
+                ctrl.nom='nom'+r;
+                ctrl.prenom='prenom'+r;
+                ctrl.email='cfg1_'+r+'@free.fr';
+                ctrl.livraison=Math.round(r/100)+' Avenue albert einstein';
+                ctrl.codepostal='69100';
+                ctrl.ville='Villeurbanne';
+            }
             userService.onLoad($scope, checkRediraction);
             userService.onLogin($scope, function(){userService.redirect("lastState");});
             this.connexion = function(){
+                ctrl.err = null;
                 var dataConnexion;
                 switch(this.user_type){
                     case "client":
@@ -48,38 +59,96 @@ angular.
                 })
             }
             this.inscription = function(){
-                alert("inscription[Not implemented]");
+                var errs=[];
+                if(typeof ctrl.email != "string" || !(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(ctrl.email))
+                    errs.push("email invalide");
+                if(typeof ctrl.nom != "string" || ctrl.nom.length<3)
+                    errs.push("nom invalide");
+                if(typeof ctrl.prenom != "string" || ctrl.prenom.length<3)
+                    errs.push("prenom invalide");
+                if(typeof ctrl.livraison != "string" || ctrl.livraison.length<3)
+                    errs.push("adresse invalide");
+                if(typeof ctrl.ville != "string" || !(/^[A-z]+$/).test(ctrl.ville))
+                    errs.push("nom de ville invalide");
+                if(typeof ctrl.codepostal != "string" || !(/^[0-9]{5}$/).test(ctrl.codepostal))
+                    errs.push("code postale invalide");
+                if(errs.length){
+                    ctrl.err = errs.join(" , ");
+                    return;
+                }
+                ctrl.err = null;
+                ctrl.inscriptionLoading = true;
+                var dataIscription = {
+                    'nom':ctrl.nom,
+                    'prenom':ctrl.prenom,
+                    'mail':ctrl.email,
+                    'adresse':ctrl.livraison+", "+ctrl.codepostal+" "+ctrl.ville//145 r Marcel Mérieux, 69007 Lyon
+                };
+                $http({
+                    method: 'GET',
+                    url: '/service/creerClient',
+                    params: dataIscription
+                }).then(function successCallback(reponse){ 
+                    if(reponse.data.result){
+                        ctrl.inscriptionSuccess = true;
+                    }else{
+                        ctrl.err="Inscription imposible";
+                    }
+                    ctrl.inscriptionLoading = false;
+                }, function errorCallback(response) {
+                    ctrl.err="Erreur de connexion avec le servic demander. Reeseyer plus tard.";
+                    ctrl.inscriptionLoading = false;
+                });
             }
         }
     })
     .factory('userService', function($state,$http,$rootScope) {
         var is_login = false;
-        var loading = true;
+        var loading = 1;
         var userType = null;
         var user = {};
         var savedStat = null;
-        $http({
-            method: 'GET',
-            url: '/service/getUtilisateur'
-        }).then(function successCallback(reponse){ 
-            loading = false;
-            if(reponse.data.client){
-                userType = "client";
-                user = reponse.data.client;
-                is_login = true;
-            }else if(reponse.data.livreur){
-                userType = "livreur";
-                user = reponse.data.livreur;
-                is_login = true;
-            }else if(reponse.data.gestionnaire){
-                userType = "gestionnaire";
-                user = reponse.data.gestionnaire;
-                is_login = true;
-            }
-            $rootScope.$emit('login-load-event');
-        }, function errorCallback(response) {
-            loading = false;
-            $rootScope.$emit('login-load-event');
+        var verifiLogin = function(sendEvent,callback){
+            $http({
+                method: 'GET',
+                url: '/service/getUtilisateur'
+            }).then(function successCallback(reponse){ 
+                if(reponse.data.client){
+                    if(!is_login || userType != "client" || user.id != reponse.data.client.id){
+                        userType = "client";
+                        user = reponse.data.client;
+                        is_login = true;
+                        if(sendEvent)
+                            $rootScope.$emit('login-event');
+                    }
+                }else if(reponse.data.livreur){
+                    if(!is_login || userType != "livreur" || user.id != reponse.data.livreur.id){
+                        userType = "livreur";
+                        user = reponse.data.livreur;
+                        is_login = true;
+                        if(sendEvent)
+                            $rootScope.$emit('login-event');
+                    }
+                }else if(reponse.data.gestionnaire){
+                    if(!is_login || userType != "gestionnaire" || user.id != reponse.data.gestionnaire.id){
+                        userType = "gestionnaire";
+                        user = reponse.data.gestionnaire;
+                        is_login = true;
+                        if(sendEvent)
+                            $rootScope.$emit('login-event');
+                    }
+                }else if(reponse.data.result === false && is_login){
+                    is_login = false;
+                    $rootScope.$emit('logout-event');
+                }
+                callback();
+            }, function errorCallback(response) {
+                callback();
+            });
+        }
+        verifiLogin(false,function(){
+                loading --;
+                $rootScope.$emit('login-load-event');
         });
         var redirect= function(stat){
             if(stat == "lastState"){
@@ -190,8 +259,15 @@ angular.
                     });
                     callback({success:true});
                 }
-            })
-        }
+            });
+        };
+        (function(){
+            var f={};
+            f.callback=function(){
+                //setTimeout(verifiLogin,2000,true,f.callback);
+            };
+            f.callback();
+        })();
         return {
             //refresh
             getUser : getUser,

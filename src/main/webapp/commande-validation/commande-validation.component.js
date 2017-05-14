@@ -12,6 +12,13 @@ angular.
             this.lockValidation = false;
             this.adresse;
             this.restaurant;
+            this.cardIsEmpty;
+            commandeService.onUpdate($scope,function(){
+                ctrl.cardIsEmpty = commandeService.isEmpty();
+            });
+            commandeService.onLoad($scope,function(){
+                ctrl.cardIsEmpty = commandeService.isEmpty();
+            });
             
             this.gotoHome = function(){
                 $state.go('restaurant');
@@ -67,6 +74,7 @@ angular.
             }
             this.annuler=function(){
                 if(ctrl.lockValidation)return;
+                commandeService.cleanCard();
                 $state.go('restaurant');
             }
             

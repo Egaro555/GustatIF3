@@ -9,12 +9,12 @@ var addMarker = function (data) {
     if("drone" in data) {
             label = '✈';
             position = {lat : data.drone.latitude, lng : data.drone.longitude};
-            content = "<h3 style='margin-bottom: 5px;'>Drône livreur</h3>Adresse : " + data.drone.adresse;
+            content = "<h3 style='margin-bottom: 5px;'>Drône livreur</h3>Adresse : " + data.drone.addresse;
     }
     else if("livreur" in data) {
             label = '🚲';
             position = {lat : data.livreur.latitude, lng : data.livreur.longitude};
-            content = "<h3 style='margin-bottom: 5px;'>Livreur \""+data.livreur.prenom+ " " + data.livreur.nom+"\"</h3>Adresse : " + data.livreur.adresse;
+            content = "<h3 style='margin-bottom: 5px;'>Livreur \""+data.livreur.prenom+ " " + data.livreur.nom+"\"</h3>Adresse : " + data.livreur.addresse;
     }
     else if("restaurant" in data) {
             label = '🍴';
@@ -56,7 +56,7 @@ var init = function(){
 };
 var push = function(data){
     if(libLoaded){
-        addMarkers(map,data);
+        addMarker(data);
     }else{
         dataWatingLib.push(data);
     }

@@ -1,6 +1,12 @@
 <loading  ng-show="login.loading"></loading>
 <div ng-hide="login.loading">
+    <div class="alert alert-danger" ng-show="login.err">
+        <a class="close" ng-click="login.err = false">&times;</a>
+        <strong>ERREUR : </strong>{{login.err}}
+    </div>
     <div class="col-sm-6">
+        <a href="" ng-click="login.email='asing8183@free.fr';login.mdp=127;login.idLivreur=1234"> cfg1 </a>
+        <a href="" ng-click="login.email='rborrotimatiasdantas4171@free.fr';login.mdp=124   ;login.idLivreur=1234"> cfg2 </a>
         <div class="panel panel-default">
             <div class="panel-heading">Connexion</div>
             <div class="panel-body">
@@ -17,14 +23,10 @@
                         </div>
                     </div>
                     <br/>
-                    <div class="alert alert-danger" ng-show="login.err">
-                        <a class="close" ng-click="login.err = false">&times;</a>
-                        <strong>ERREUR : </strong>{{login.err}}
-                    </div>
                     <div ng-show="login.user_type==='client'">
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" ng-model="login.email" placeholder="email">
+                            <input type="email" class="form-control" ng-model="login.email" placeholder="email">
                         </div><br>
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">Mot de passe</span>
@@ -44,21 +46,22 @@
         </div>
     </div>
     <div class="col-sm-6">
+        <a href="" ng-click="login.randCfg()"> randomCfg </a>
         <div class="panel panel-default">
             <div class="panel-heading">Pas de compte ? Inscrivez-vous gratuitement !</div>
             <div class="panel-body">
-                <form ng-submit="login.inscription()">
+                <form ng-submit="login.inscription()" ng-if="!login.inscriptionSuccess">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Prénom</span>
                         <input type="text" class="form-control" ng-model="login.nom" placeholder="password">
                     </div><br>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Nom</span>
-                        <input type="text" class="form-control" ng-model="login.nom" placeholder="password">
+                        <input type="text" class="form-control" ng-model="login.prenom" placeholder="password">
                     </div><br>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Adresse mail</span>
-                        <input type="text" class="form-control" ng-model="login.email" placeholder="email">
+                        <input type="email" class="form-control" ng-model="login.email" placeholder="email">
                     </div><br>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Adresse de livraison</span>
@@ -77,8 +80,15 @@
                         </div><br>
                     </div>
                     <div class="clearfix"></div>
-                    <button type="submit" class="btn btn-primary">S'enregister</button>
+                    <button type="submit" class="btn btn-primary" ng-if="!login.inscriptionLoading">S'enregister</button>
+                    <loading ng-if="login.inscriptionLoading"></loading>
                 </form>
+                <div ng-if="login.inscriptionSuccess" class="alert alert-success">
+                    Bienvenu ,<strong>{{login.prenom}} {{login.nom}}</strong><br>
+                    <br>
+                    Votre inscription c'est bien derouler,<br>
+                    Vous pouvez vous connecter pour commander.
+                </div>
             </div>
         </div>
     </div>

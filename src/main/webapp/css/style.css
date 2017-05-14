@@ -6,11 +6,20 @@ body {
     width: 100%;
     text-align: center;
 }
+.header-titre{
+    display: inline-block;
+    background: #ffffff;
+    border: solid 1px #d3d3d3;
+    margin-top: 9px;
+    border-radius: 10px;
+    padding : 6px;
+}
 .header-statut{
     display: inline-block;
     background: #ffffff;
     border: solid 1px #d3d3d3;
-    margin-top: 12px;
+    padding:0px; 
+    margin-top: 9px;
     border-radius: 10px;
 }
 .header-statut .btn {

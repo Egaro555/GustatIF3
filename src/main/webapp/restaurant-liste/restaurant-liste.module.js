@@ -1,4 +1,5 @@
 // Define the `restaurantListe` module
 angular.module('restaurantListe',[
-    'login'
+    'login',
+    'commandeDetail'
 ]);

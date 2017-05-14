@@ -4,7 +4,7 @@ angular.
     component('restaurantListe', {
         controllerAs : 'restaurantes',
         templateUrl: 'restaurant-liste/restaurant-liste.template.html',
-        controller: function RestaurantListController($scope,$http,$state,userService) {
+        controller: function RestaurantListController($scope,$http,$state,userService,commandeService) {
             var ctrl = this;
             
             this.loading = 1; // 
@@ -30,10 +30,10 @@ angular.
                 });
             };
             
-            this.getLinkSelectedRestaurante = function(){
-                    return (this.selectedRestaurante ?
-                            $state.href('shop',{restaurantId:this.selectedRestaurante.id}) :
-                            "");
+            this.editSelectedRestaurante = function(){
+                if(!this.selectedRestaurante)return;
+                commandeService.cleanCard();
+                $state.go('shop',{restaurantId:this.selectedRestaurante.id});
             };
             
             userService.requirLogin('client',$scope,function(){

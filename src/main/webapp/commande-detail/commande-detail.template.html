@@ -4,7 +4,7 @@
         <button type="button" class="close" ng-click="detailCMD.err = null;"><span aria-hidden="true">&times;</span></button>
         <strong>ERREUR : !</strong> {{detailCMD.err}}
     </div>
-    <table class="table">
+    <table class="table" ng-if="detailCMD.produits.length">
         <thead class="thead-inverse">
             <th>Nom</th>
             <th style="width:50px">Quantité</th>
@@ -34,4 +34,7 @@
             </tr>
         </tbody>
     </table>
+    <div ng-if="!detailCMD.produits.length">
+        Votre pagnée est vide!
+    </div>
 </div>
