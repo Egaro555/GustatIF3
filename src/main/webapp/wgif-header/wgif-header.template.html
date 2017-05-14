@@ -12,9 +12,9 @@
             </div>
             <div class="header-statut" ng-if="headerCMD.btnsType=='object'">
                 <a class="btn" ng-class="{'btn-primary':headerCMD.btns[0].active,'hidden-xs btn-default':!headerCMD.btns[0].active}" ng-href="{{headerCMD.btns[0].href}}">{{headerCMD.btns[0].titre}}</a>
-                <strong class="hidden-xs" ng-if="headerCMD.btns[1]">&nbsp;>&nbsp;</strong>
+                <strong class="hidden-xs" ng-if="headerCMD.btns[1]">&nbsp;&gt;&nbsp;</strong>
                 <a class="btn" ng-class="{'btn-primary':headerCMD.btns[1].active,'hidden-xs btn-default':!headerCMD.btns[1].active}" ng-href="{{headerCMD.btns[1].href}}" ng-if="headerCMD.btns[1]">{{headerCMD.btns[1].titre}}</a>
-                <strong class="hidden-xs" ng-if="headerCMD.btns[2]">&nbsp;>&nbsp;</strong>
+                <strong class="hidden-xs" ng-if="headerCMD.btns[2]">&nbsp;&gt;&nbsp;</strong>
                 <a class="btn" ng-if="headerCMD.btns[2]" ng-class="{'btn-primary':headerCMD.btns[2].active,'hidden-xs btn-default':!headerCMD.btns[2].active}" ng-href="{{headerCMD.btns[2].href}}">{{headerCMD.btns[2].titre}}</a>
             </div>
         </div>

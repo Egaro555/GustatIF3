@@ -96,7 +96,7 @@ angular.
                     }
                     ctrl.inscriptionLoading = false;
                 }, function errorCallback(response) {
-                    ctrl.err="Erreur de connexion avec le servic demander. Reeseyer plus tard.";
+                    ctrl.err="Erreur de connexion avec le service demandé. Réessayer plus tard.";
                     ctrl.inscriptionLoading = false;
                 });
             }
