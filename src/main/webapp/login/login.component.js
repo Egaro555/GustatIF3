@@ -20,7 +20,7 @@ angular.
                             $state.go('livreur');
                             break;
                         case "gestionnaire":
-                            $state.go('gestionnaire');
+                            $state.go('gestionnaire',{type:"Drones"});
                     }
                 }else{
                     ctrl.loading = false;
@@ -95,7 +95,7 @@ angular.
                 }else if(userType == "livreur"){
                     $state.go('livreur');
                 }else if(userType == "gestionnaire"){
-                    $state.go('gestionnaire');
+                    $state.go('gestionnaire',{type:"Drones"});
                 }
             }
         }
