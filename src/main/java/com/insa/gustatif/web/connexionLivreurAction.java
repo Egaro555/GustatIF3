@@ -6,6 +6,7 @@
 package com.insa.gustatif.web;
 
 import com.insa.gustatif.metier.modele.Livreur;
+import com.insa.gustatif.metier.modele.LivreurVelo;
 import com.insa.gustatif.metier.service.ServiceMetier;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,16 +17,18 @@ import javax.servlet.http.HttpServletRequest;
 class connexionLivreurAction implements Action {
 
     Livreur livreur;
-    
+
     @Override
     public void execute(HttpServletRequest request) {
         livreur = ServiceMetier.connexionLivreur(Long.parseLong(request.getParameter("idLivreur")));
+
+        if (!(livreur instanceof LivreurVelo)) {
+            livreur = null;
+        }
     }
 
     public Livreur getLivreur() {
         return livreur;
     }
-    
-    
-    
+
 }

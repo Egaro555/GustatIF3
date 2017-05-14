@@ -20,6 +20,10 @@ class connexionClientEmailAction implements Action {
     @Override
     public void execute(HttpServletRequest request) {
         client = ServiceMetier.connexionClientEmail(request.getParameter("email"), Long.parseLong(request.getParameter("idClient")));
+        
+        if(client != null && Double.parseDouble(request.getParameter("idClient")) != client.getId()) {
+            client = null;
+        }
     }
 
     public Client getClient() {
