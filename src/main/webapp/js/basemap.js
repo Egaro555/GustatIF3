@@ -1,3 +1,4 @@
+console.log("basemap.js");
 var map;
 var libLoaded = false;
 var dataWatingLib = [];
@@ -21,8 +22,17 @@ var addMarker = function (data) {
             position = {lat : data.restaurant.latitude, lng : data.restaurant.longitude};			
             content = "<h3 style='margin-bottom: 5px;'>Restaurant \""+data.restaurant.denomination+"\"</h3>Adresse : " + data.restaurant.adresse;
 
+    }else{
+        console.error("MAP : MARKER IN INKNOW",data);
+        return
     }
-
+    
+    if(typeof position.lat != "number" || typeof position.lng != "number"){
+        console.warn("MAP : MARKED AS NOT LAT LNG",data,position);
+        return;
+    }
+    
+    
     var marker = new google.maps.Marker({
     label : label,
     position : position,
@@ -48,6 +58,7 @@ var addMarker = function (data) {
 };
 var init = function(){
     if(!libLoaded)return;
+    console.log("Map initaliser");
     markers = [];
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 0,
@@ -74,6 +85,7 @@ mapControler  = {
 };
 function onLibMapLoad() {
     libLoaded = true;
+    console.log("LibMapLoad");
     init();
     for(d in dataWatingLib) {
         mapControler.addMarker(dataWatingLib[d]);
