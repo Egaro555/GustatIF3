@@ -30,7 +30,7 @@
                             <th>Poids max</th>
                     </tr>
 
-                    <tr ng-class="{active : livreur == livreursManagerCMD.selectedLivreur}" ng-repeat="livreur in livreursManagerCMD.livreurs  | filter:livreursManagerCMD.search" ng-click="livreursManagerCMD.setSelectedLivreur(livreur)">
+                    <tr class="pointer" ng-class="{active : livreur == livreursManagerCMD.selectedLivreur}" ng-repeat="livreur in livreursManagerCMD.livreurs  | filter:livreursManagerCMD.search" ng-click="livreursManagerCMD.setSelectedLivreur(livreur)">
                             <td>{{livreur.type}} {{livreur.id}}</td>
                             <td>{{livreur.addresse}}</td>
                             <td>{{(livreur.cmdeEnCours===null?"oui":"non")}}</td>

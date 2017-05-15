@@ -20,11 +20,11 @@
                     <div class="col-xs-8"><strong>Adresse</strong></div>
                     <div class="clearfix"></div>
                 </div>
-                <a class="list-group-item" ng-repeat="resto in restaurantes.restaurantes | filter:restaurantes.search" ng-click="restaurantes.selectedRestaurante = resto;" ng-class="{'active':restaurantes.selectedRestaurante&&restaurantes.selectedRestaurante.id==resto.id}">
+                <div class="list-group-item pointer" ng-repeat="resto in restaurantes.restaurantes | filter:restaurantes.search" ng-click="restaurantes.selectedRestaurante = resto;" ng-class="{'active':restaurantes.selectedRestaurante&&restaurantes.selectedRestaurante.id==resto.id}">
                     <div class="col-xs-4"><strong>{{resto.denomination}}</strong></div>
                     <div class="col-xs-8">{{resto.adresse}}</div>
                     <div class="clearfix"></div>
-                </a>
+                </div>
             </div>
         </div>
     </div>

@@ -41,12 +41,23 @@ body {
     color: #ffffff;
     padding : 10px;
 }
-.body-container{
-    
-}
-
 .input-group-addon.glyphicon {
     top:0;
+}
+.btn_qte{
+    border: solid 1px #d8d5d5;
+    text-align: center;
+    border-radius: 2px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.btn_qte:hover{
+    background: #ababab;
+    color:#ffffff;
+    border-color:#909090;
+}
+.pointer{
+    cursor: pointer;
 }
 
 

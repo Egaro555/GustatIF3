@@ -86,8 +86,9 @@ mapControler  = {
 function onLibMapLoad() {
     libLoaded = true;
     console.log("LibMapLoad");
+    if(!document.getElementById('map'))return;
     init();
     for(d in dataWatingLib) {
-        mapControler.addMarker(dataWatingLib[d]);
+        addMarker(dataWatingLib[d]);
     }
 }

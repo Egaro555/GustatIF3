@@ -3,8 +3,10 @@ angular.
     component('commandeDetail', {
         controllerAs: 'detailCMD',
         templateUrl: 'commande-detail/commande-detail.template.html',
-        controller: function RestaurantListController(commandeService,$scope) {
+        controller: function RestaurantListController(commandeService,$scope,$attrs) {
             var ctrl = this;
+            this.editable = !$attrs.fix;
+            console.log("editable : ",this.editable);
             this.loading = 1;
             this.produits = [];
             this.setQte = function(commandeItem){

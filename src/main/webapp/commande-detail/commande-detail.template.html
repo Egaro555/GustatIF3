@@ -7,12 +7,16 @@
     <table class="table" ng-if="detailCMD.produits.length">
         <thead class="thead-inverse">
             <th>Nom</th>
+            <th style="width:1px" ng-if="detailCMD.editable"></th>
             <th style="width:50px">Quantité</th>
             <th style="width:50px">Prix</th>
         </thead>
         <tbody>
             <tr ng-repeat="produitItems in detailCMD.produits">
                 <td>{{produitItems.produit.denomination}}</td>
+                <td ng-if="detailCMD.editable">
+                    <button class="btn btn-xs btn-danger" ng-click="produitItems.qte_tmp=0;detailCMD.setQte(produitItems)">Supprimer</button>
+                </td>
                 <td>
                     <loading ng-show="produitItems.load"></loading>
                     <div class="input-group input-group-sm" ng-show="produitItems.edit && !produitItems.load">
@@ -22,14 +26,14 @@
                             <button class="btn btn-danger" type="button" ng-click="produitItems.edit=false;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                         </span>
                     </div>
-                    <div ng-hide="produitItems.edit || produitItems.load" ng-click="produitItems.edit=true;produitItems.qte_tmp=produitItems.qte;">
+                    <div ng-hide="produitItems.edit || produitItems.load" ng-class="{btn_qte:detailCMD.editable}" ng-click="produitItems.edit=detailCMD.editable;produitItems.qte_tmp=produitItems.qte;">
                         {{produitItems.qte}}
                     </div>
                 </td>
                 <td>{{(produitItems.edit?produitItems.qte_tmp:produitItems.qte) * produitItems.produit.prix | number:2}}&nbsp;E</td>
             </tr>
             <tr>
-                <td colspan="2" class="text-right"><strong>Total</strong></td>
+                <td colspan="{{detailCMD.editable?3:2}}" class="text-right"><strong>Total</strong></td>
                 <td><strong>{{detailCMD.getTotal()}}&nbsp;E</strong></td>
             </tr>
         </tbody>

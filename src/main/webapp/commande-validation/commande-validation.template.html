@@ -21,7 +21,7 @@
         </tbody>
     </table>
     <h3 ng-if="!validationCMD.finish">Votre panier :</h3>
-    <commande-detail ng-if="!validationCMD.finish"></commande-detail>
+    <commande-detail ng-if="!validationCMD.finish" fix="true"></commande-detail>
     <div class="alert alert-success alert-dismissible" role="alert" ng-if="validationCMD.finish">
         <strong> Votre commande a bien été enregistrée !</strong></br>
         Bonne Apétit<br>
