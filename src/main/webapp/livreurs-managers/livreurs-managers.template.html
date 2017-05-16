@@ -90,16 +90,16 @@
                 </div>
                 <div class="panel-body" ng-if="livreursManagerCMD.detail.charger">
                     <h4>Commande n°{{livreursManagerCMD.detail.commande.numCommande}}</h3>
-                    <strong>date de la Commande :</strong>{{livreursManagerCMD.detail.commande.dateCommande}}<br/>
+                    <strong>Date de la commande : </strong>{{livreursManagerCMD.detail.commande.dateCommande}}<br/>
                     <br>
                     <h4>Client</h4>
-                    <strong>Nom :</strong>{{livreursManagerCMD.detail.client.nom}}<br/>
-                    <strong>Adresse :</strong>{{livreursManagerCMD.detail.client.addresse}}<br/>
-                    <strong>mail :</strong>{{livreursManagerCMD.detail.client.mail}}<br/>
+                    <strong>Nom : </strong>{{livreursManagerCMD.detail.client.nom}}<br/>
+                    <strong>Adresse : </strong>{{livreursManagerCMD.detail.client.addresse}}<br/>
+                    <strong>Email : </strong>{{livreursManagerCMD.detail.client.mail}}<br/>
                     <br>
                     <h4>Restaurant</h4>
-                    <strong>Nom :</strong>{{livreursManagerCMD.detail.restaurant.denomination}}<br/>
-                    <strong>Adresse :</strong>{{livreursManagerCMD.detail.restaurant.adresse}}<br/>
+                    <strong>Nom : </strong>{{livreursManagerCMD.detail.restaurant.denomination}}<br/>
+                    <strong>Adresse : </strong>{{livreursManagerCMD.detail.restaurant.adresse}}<br/>
                     <br>
                     <h4>Produis</h4>
                     <table class="table table-bordered">
@@ -118,8 +118,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <strong>Poids total :</strong>{{livreursManagerCMD.detail.commande.poidsTotal}} g<br/>
-                    <strong>Total :</strong>{{livreursManagerCMD.detail.commande.prixTotal}} E<br/>
+                    <strong>Poids total : </strong>{{livreursManagerCMD.detail.commande.poidsTotal}} g<br/>
+                    <strong>Total : </strong>{{livreursManagerCMD.detail.commande.prixTotal}} E<br/>
                     <loading ng-if="livreursManagerCMD.loadValidation"></loading>
                     <button type="button" class="btn btn-default btn-sm" ng-click="livreursManagerCMD.detail.show = false">Retour</button>
                     <button type="button" class="btn btn-default btn-sm" ng-class="{disabled:livreursManagerCMD.loadValidation}" ng-click="livreursManagerCMD.cloturer()">Clôturer Commande</button>

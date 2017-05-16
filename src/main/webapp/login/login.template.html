@@ -5,8 +5,8 @@
         <strong>ERREUR : </strong>{{login.err}}
     </div>
     <div class="col-sm-6">
-        <a href="" ng-click="login.email='asing8183@free.fr';login.mdp=127;login.idLivreur=3001"> cfg1 </a>
-        <a href="" ng-click="login.email='rborrotimatiasdantas4171@free.fr';login.mdp=124;login.idLivreur=2951"> cfg2 </a>
+        <a href="" ng-click="login.email='asing8183@free.fr';login.mdp=127;login.idLivreur=3001">QuickConfig 1 </a> |
+        <a href="" ng-click="login.email='rborrotimatiasdantas4171@free.fr';login.mdp=124;login.idLivreur=2951">QuickConfig 2 </a>
         <div class="panel panel-default">
             <div class="panel-heading">Connexion</div>
             <div class="panel-body">
@@ -40,24 +40,25 @@
                         </div><br>
                     </div>
                     <div ng-show="login.user_type==='gestionnaire'"></div>
-                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    <button type="submit" class="btn btn-primary" ng-if="!login.loginLoading">Se connecter</button>
+                    <loading ng-if="login.loginLoading"></loading>
                 </form>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
-        <a href="" ng-click="login.randCfg()"> randomCfg </a>
+        <a href="" ng-click="login.randCfg()"> QuickConfig Random </a>
         <div class="panel panel-default">
             <div class="panel-heading">Pas de compte ? Inscrivez-vous gratuitement !</div>
             <div class="panel-body">
                 <form ng-submit="login.inscription()" ng-if="!login.inscriptionSuccess">
                     <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">Prénom</span>
-                        <input type="text" class="form-control" ng-model="login.nom" placeholder="password">
+                        <span class="input-group-addon" id="basic-addon1">Nom</span>
+                        <input type="text" class="form-control" ng-model="login.nom" placeholder="nom">
                     </div><br>
                     <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">Nom</span>
-                        <input type="text" class="form-control" ng-model="login.prenom" placeholder="password">
+                        <span class="input-group-addon" id="basic-addon1">Prénom</span>
+                        <input type="text" class="form-control" ng-model="login.prenom" placeholder="prenom">
                     </div><br>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Adresse mail</span>
@@ -86,10 +87,10 @@
                     <loading ng-if="login.inscriptionLoading"></loading>
                 </form>
                 <div ng-if="login.inscriptionSuccess" class="alert alert-success">
-                    Bienvenu ,<strong>{{login.prenom}} {{login.nom}}</strong><br>
+                    Bienvenue, <strong>{{login.prenom}} {{login.nom}}</strong><br>
                     <br>
-                    Votre inscription c'est bien derouler,<br>
-                    Vous pouvez vous connecter pour commander.
+                    Votre inscription s'est bien déroulée,<br>
+                    Vous pouvez vous connecter pour effectuer une commande.
                 </div>
             </div>
         </div>

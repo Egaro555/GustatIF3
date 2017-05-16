@@ -34,6 +34,18 @@ angular.module('appGustatIF')
                 url: '/carte',
                 template : '<map></map>'
             })
+            .state('cgu', {
+                url: '/cgu',
+                template : '<h1>Conditions d\'utilisation</h1>'
+            })
+            .state('pdc', {
+                url: '/pdc',
+                template : '<h1>Politique de confidentialité</h1>'
+            })
+            .state('ml', {
+                url: '/ml',
+                template : '<h1>Mentions légales</h1>'
+            });
             $urlRouterProvider.otherwise(function ($injector, $location) {
                 var $state = $injector.get('$state');
                 $state.go('login');

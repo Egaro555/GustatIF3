@@ -9,13 +9,13 @@ angular.
             this.loading = 1;
             this.livreurs;
             this.restaurants;
-            mapControler.clean();
             this.loadLivreur = function(){
                 ctrl.loading++;
                 $http({
                     method: 'GET',
                     url: '/service/findAllLivreurs'
                 }).then(function successCallback(reponse){
+                    mapControler.clean();
                     if(reponse.data.livreurs){
                         ctrl.livreurs = reponse.data.livreurs;
                         for(var l in ctrl.livreurs){
