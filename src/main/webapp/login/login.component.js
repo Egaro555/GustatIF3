@@ -39,6 +39,7 @@ angular.
             userService.onLoad($scope, checkRediraction);
             userService.onLogin($scope, function(){userService.redirect("lastState");});
             this.connexion = function(){
+                ctrl.loginLoading = true;
                 ctrl.err = null;
                 var dataConnexion;
                 switch(this.user_type){
@@ -53,6 +54,7 @@ angular.
                         break;
                 }
                 userService.login(this.user_type,dataConnexion,function(data){
+                    ctrl.loginLoading = false;
                     if(data.err){
                         ctrl.err = data.err;
                     }
